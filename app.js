@@ -42,6 +42,27 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
+
+    
+
+
+
+    // Retrun error API signup
+  if (req.originalUrl.startsWith('/api/v1/signup')){
+    if (err.array){
+        const errorInfo = err.errors[0];
+        err.message = `${errorInfo.msg} `  
+        err.status = 400 
+      }
+
+    
+    res.json(err);
+    
+    return;
+  }
+
+
+    
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
