@@ -1,46 +1,52 @@
 const express = require('express');
 const router = express.Router();
+const User = require('../../models/Users');
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
-const { body, validationResult } = require('express-validator');
-const { check, oneOf } = require('express-validator');
 
+//GET default response API
 router.get('/', function (req, res, next) {
   res.json({ API: 'Good Day In Space' });
 });
 
-//POST /api/v1/signup (body)
-// Crea un Usuario
 
+
+//POST /api/v1/signup (body)
+// Create un User
 router.post(
   '/signup',
   upload.array('files'),
-  [
-    body(body.email)
-      .custom(valor => {
-        if (email.indexOf('@') === -1) {
-          return false;
+
+  async function (req, res, next) {
+    try {
+      const user = req.body.user;
+      const email = req.body.email;
+      const password = req.body.password; 
+    
+      if (email.indexOf('@') === -1) {
+        res.json({ status: 400, message : "Email is not valid"  }); 
+        return
+      }
+
+      //Habilitate Crypto Password
+      //const newUser = new User({user:user , email:email, password:await  User.hashPassword(password) });
+      const newUser = new User({user:user , email:email, password:password });
+
+
+      const userSave = await newUser.save();
+
+      res.json({ status:"OK", result: userSave });
+    } catch (error) {
+        
+        if (error.code===11000){  
+            res.json({ status: 400, message : "User duplicate"  }); 
+        }else{
+            res.json({ status: 400, message : "Error Create User"  }); 
         }
-      })
-      .withMessage(`email is not valid`),
-  ],
-  function (req, res, next) {
-    validationResult(req).throw();
-
-    const user = req.body.user;
-    const email = req.body.email;
-    const password = req.body.password;
-
-    console.log('user', user);
-    console.log('email', email);
-    console.log('password', password);
-    res.json({ API: 'Good Day In Space' });
+        next()
+    }
   }
 );
-
-
-
-
 
 module.exports = router;
