@@ -4,11 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors');
-
+const jwtAuthMiddleware = require('./lib/jwtAuthMiddleware');
 const config = require('./config');
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const LoginController = require('./controller/loginController');
 
 var app = express();
 
@@ -26,14 +26,23 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+const loginController = new LoginController();
+
 /**
  * Rutas del API 
  */
 app.use('/api/v1',require('./routes/api/user'));
+app.post("/api/authenticate", loginController.Authenticate);
+
+//rutas sitio web
+
+app.get('/login', loginController.index);
+app.post('/login', loginController.Authenticate);
 
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
