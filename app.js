@@ -10,6 +10,8 @@ const config = require('./config');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+require('./lib/connectMongoose');
+
 var app = express();
 
 app.use(cors(
