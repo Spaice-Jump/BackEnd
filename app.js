@@ -46,7 +46,6 @@ app.post("/api/authenticate", loginController.Authenticate);
 app.get('/login', loginController.index);
 app.post('/login', loginController.Authenticate);
 
-app.use('/api/v1', require('./routes/api/user'));
 
 
 
