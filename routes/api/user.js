@@ -37,14 +37,17 @@ router.post(
       const userSave = await newUser.save();
 
       res.json({ status:"OK", result: userSave });
+      return
     } catch (error) {
         
         if (error.code===11000){  
             res.json({ status: 400, message : "User duplicate"  }); 
+            return
         }else{
             res.json({ status: 400, message : "Error Create User"  }); 
+            return
         }
-        next()
+      
     }
   }
 );
