@@ -1,6 +1,6 @@
 # BackEnd --- 
 
-Install dependencies whith:
+Install dependencies with:
 ```sh
 npm install
 ```
