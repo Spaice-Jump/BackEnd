@@ -32,7 +32,7 @@ class LoginController {
           expiresIn: '2d',
         }
       );
-      console.log('token', token);
+      
       res.json({ jwt: token });
     } catch (err) {
       next(err);
