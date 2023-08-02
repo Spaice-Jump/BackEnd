@@ -6,7 +6,7 @@ const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 
 //GET default response API
-router.get('/', function (req, res, next) {
+router.post('/', function (req, res, next) {
   res.json({ API: 'Good Day In Space' });
 });
 
@@ -30,8 +30,8 @@ router.post(
       }
 
       //Habilitate Crypto Password
-      //const newUser = new User({user:user , email:email, password:await  User.hashPassword(password) });
-      const newUser = new User({user:user , email:email, password:password });
+      const newUser = new User({user:user , email:email, password:await  User.hashPassword(password) });
+      //const newUser = new User({user:user , email:email, password:password });
 
 
       const userSave = await newUser.save();

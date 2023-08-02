@@ -39,12 +39,12 @@ const loginController = new LoginController();
  */
 
 app.use('/api/v1',require('./routes/api/user'));
-app.post("/api/authenticate", loginController.Authenticate);
+app.post("/api/authenticate", loginController.postAPI);
 
 //rutas sitio web
 
 app.get('/login', loginController.index);
-app.post('/login', loginController.Authenticate);
+app.post('/login', loginController.postAPI);
 
 
 

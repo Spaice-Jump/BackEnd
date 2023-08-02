@@ -1,42 +1,43 @@
-const User = require("../models/users.js");
-const jsonWT = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-
+const Usuario = require('../models/users.js');
+const jwt = require('jsonwebtoken');
 
 class LoginController {
+  index(req, res, next) {
+    res.locals.error = '';
+    res.locals.email = '';
+    res.render('login');
+  }
 
-    index(req, res, next) {
-        res.locals.error = '';
-        res.locals.email = '';
-        res.render('login')
+  // login post desde el API
+  async postAPI(req, res, next) {
+    try {
+      const { email, password } = req.body;
+
+      // buscar el usuario en la BD
+      const usuario = await Usuario.findOne({ email: email });
+
+      // si no lo encuentro o no coincide la contraseña --> error
+      if (!usuario || !(await usuario.comparePassword(password))) {
+        res.json({ status: 400, error: 'invalid credentials' });
+
+        return;
       }
 
-    async Authenticate(req, res, next){
-        try {
-            const {email, password} = req.body;
-            
-            //busca en la BD si coincide el email del usuario
-            const userData = await User.findOne({email: email});
-
-            
-            //si no encuentro o no coincide la contraseña dar el error
-            if(!userData || !(await bcrypt.compare(password, userData.password))){
-                res.locals.error = 'El usuario no existe';
-                res.locals.email= email;
-                res.redirect('/login');
-                return;
-            }
-
-            const signedToken = jsonWT.sign({userId: userData.email}, process.env.JWT_POWER_SECRET, {
-               expiresIn: '4d' 
-            });
-
-            res.json({token: signedToken});
-
-        } catch(err) {
-            next(err);
+      // si existe y la contrseña coincide
+      // crear un token JWT con el _id del usuario dentro
+      const token = await jwt.sign(
+        { _id: usuario._id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: '2d',
         }
+      );
+      console.log('token', token);
+      res.json({ jwt: token });
+    } catch (err) {
+      next(err);
     }
+  }
 }
 
 module.exports = LoginController;
