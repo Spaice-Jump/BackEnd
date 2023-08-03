@@ -34,6 +34,7 @@ class LoginController {
         }
       );
 
+
       res.json({ jwt: token });
     } catch (err) {
       next(err);
