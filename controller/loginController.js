@@ -18,6 +18,7 @@ class LoginController {
 
       // si no lo encuentro o no coincide la contraseña --> error
       if (!usuario || !(await usuario.comparePassword(password))) {
+        
         res.json({ status: 400, error: 'invalid credentials' });
 
         return;
@@ -32,7 +33,7 @@ class LoginController {
           expiresIn: '2d',
         }
       );
-      console.log('token', token);
+
       res.json({ jwt: token });
     } catch (err) {
       next(err);
