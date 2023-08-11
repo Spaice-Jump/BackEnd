@@ -18,6 +18,7 @@ class LoginController {
 
       // si no lo encuentro o no coincide la contraseña --> error
       if (!usuario || !(await usuario.comparePassword(password))) {
+        
         res.json({ status: 400, error: 'invalid credentials' });
 
         return;
@@ -34,6 +35,7 @@ class LoginController {
       );
       
       res.json({ jwt: token, userId: usuario._id });
+
     } catch (err) {
       next(err);
     }
