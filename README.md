@@ -29,6 +29,10 @@ Install **MongoDB**
 MOGODB_CONNECTION_STR=mongodb://127.0.0.1:27017/spacejump
 ```
 
+Checking MongoDB
+
+* Run NoSQLBooster for MongoDB
+* Connect string: `mongodb://localhost:27017` 
 
 ## How to run in local environment
 
