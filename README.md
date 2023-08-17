@@ -54,4 +54,42 @@ Result
   backend:server Listening on port 3001 +0ms
 Connected to MongoDB in spacejump
 ```
+---------------------------------------------------------------------
+#### API Methods
 
+You need a MongoDB data base
+
+The connection is located in .lib/connectMongoose.js
+
+##### GET /api/travels   o    GET "/api/anuncios/:id  --> Devuelve todos / o el anuncio filtrado por su iD.
+
+{
+    "anuncios": [
+        {
+            "_id": "63f4b073ec1b7490eb8f9bc6",
+            "nombre": "Caja de melocotones",
+            "venta": true,
+            "precio": 9.99,
+            "foto": "melocotones.jpg",
+            "tags": [
+                "lifestyle"
+            ],
+            "__v": 0
+        }
+    ]
+}
+
+##### POST "/api/travels"
+
+
+Returns a JSON with the travel inserted in the API.
+
+##### PUT "/api/travels"
+
+return a JSON with the travel update.
+
+##### DELETE "/api/anuncios/:id"
+
+Confirms delete of the travel.
+
+---------------------------------------------------------------------
