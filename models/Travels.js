@@ -8,7 +8,7 @@ const travelsSchema = moongose.Schema({
   forSale: Boolean,
   origin: String,
   destination: String,
-  userID: String,
+  userId: String,
 });
 
 travelsSchema.statics.list = function(filter, limit, skip, sort, select) {

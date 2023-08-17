@@ -10,8 +10,6 @@ const config = require('./config');
 
 require('dotenv').config()
 
-
-
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const LoginController = require('./controller/loginController');
@@ -40,19 +38,15 @@ const loginController = new LoginController();
 
 app.use('/api/v1',require('./routes/api/user'));
 app.post("/api/authenticate", loginController.postAPI);
-app.use('/api/', require('./routes/api/travels'));
+app.use('/api/travels', require('./routes/api/travels'));
 
 //rutas sitio web
 
 app.get('/login', loginController.index);
 app.post('/login', loginController.postAPI);
 
-
-
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -62,11 +56,7 @@ app.use(function(req, res, next) {
 // error handler
 app.use(function(err, req, res, next) {
 
-    
-
-
-
-    // Retrun error API signup
+    // Return error API signup
   if (req.originalUrl.startsWith('/api/v1/signup')){
     if (err.array){
         const errorInfo = err.errors[0];
@@ -74,13 +64,16 @@ app.use(function(err, req, res, next) {
         err.status = 400 
       }
 
-    
     res.json(err);
-    
     return;
   }
 
+  // Return a JSON error about API travels methods.
 
+  if (req.originalUrl.startsWith('/api/travels')){
+    res.json({ error: err.message });
+    return;
+  }
     
   // set locals, only providing error in development
   res.locals.message = err.message;

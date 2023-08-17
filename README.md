@@ -61,10 +61,18 @@ You need a MongoDB data base
 
 The connection is located in .lib/connectMongoose.js
 
-##### GET /api/travels   o    GET "/api/anuncios/:id  --> Devuelve todos / o el anuncio filtrado por su iD.
+##### GET /api/travels
 
+Returns all travels
+
+##### GET "/api/travels/:id  --> Devuelve todos / o el anuncio filtrado por su iD.
+
+Returns a travel filtered by its id.
+
+
+<!-- TODO -->
 {
-    "anuncios": [
+    "travel": [
         {
             "_id": "63f4b073ec1b7490eb8f9bc6",
             "nombre": "Caja de melocotones",
