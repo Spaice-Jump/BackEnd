@@ -15,6 +15,7 @@ require('dotenv').config()
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const LoginController = require('./controller/loginController');
+const DeleteUserController = require('./controller/deleteUserController');
 
 require('./lib/connectMongoose');
 
@@ -32,7 +33,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 const loginController = new LoginController();
+const deleteUserController = new DeleteUserController();
 
 /**
  * Rutas del API
@@ -40,6 +43,9 @@ const loginController = new LoginController();
 
 app.use('/api/v1',require('./routes/api/user'));
 app.post("/api/authenticate", loginController.postAPI);
+
+// app.get('/api/v1/deleteuser', deleteUserController.index);
+// app.delete('/api/v1/deleteuser', deleteUserController.postAPI);
 
 //rutas sitio web
 
