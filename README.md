@@ -36,6 +36,11 @@ Checking MongoDB
 
 ## How to run in local environment
 
+Initializating data:
+```sh
+npm run initDB
+```
+
 Start in development mode:
 ```sh
 npm run dev
