@@ -1,13 +1,13 @@
 const moongose = require('mongoose');
 
 const travelsSchema = moongose.Schema({
-  topic: String,
-  remarks: String,
-  photo: String, //TODO: Image??
-  price: {type: Number, required: true},
-  forSale: Boolean,
   origin: {type: String, required: true},
   destination: {type: String, required: true},
+  price: {type: Number, required: true},
+  topic: String,
+  remarks: String,
+  photo: String,
+  forSale: Boolean,
   userId: String,
 });
 
