@@ -4,10 +4,10 @@ const travelsSchema = moongose.Schema({
   topic: String,
   remarks: String,
   photo: String, //TODO: Image??
-  price: Number,
+  price: {type: Number, required: true},
   forSale: Boolean,
-  origin: String,
-  destination: String,
+  origin: {type: String, required: true},
+  destination: {type: String, required: true},
   userID: String,
 });
 

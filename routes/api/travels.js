@@ -34,6 +34,7 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', async (req, res, next) => {
   try {
+    console.log(req.body);
     const data = req.body;
     const travel = new Travels(data);
     const result = await travel.save();

@@ -40,7 +40,7 @@ const loginController = new LoginController();
 
 app.use('/api/v1',require('./routes/api/user'));
 app.post("/api/authenticate", loginController.postAPI);
-app.use('/api/', require('./routes/api/travels'));
+app.use('/api/travels', require('./routes/api/travels'));
 
 //rutas sitio web
 
