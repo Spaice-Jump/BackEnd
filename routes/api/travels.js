@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Travels = require('../../models/Travels');
+const upload = require('../../lib/multerConfig');
 
 // GET /api/travels Return all travels.
 
@@ -32,9 +33,12 @@ router.get('/:id', async (req, res, next) => {
 
 // POST /api/travels Create a new travel.
 
-router.post('/', async (req, res, next) => {
+router.post('/', upload.single('photo'), async (req, res, next) => {
   try {
-    const data = req.body;
+    const data = req.body, photo = req.file.filename;
+    console.log('fichero:', req.file);
+    console.log('req.body', req.body);
+    console.log('data', data);
     const travel = new Travels(data);
     const result = await travel.save();
     res.json(result);

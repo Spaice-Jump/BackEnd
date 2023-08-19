@@ -39,6 +39,7 @@ const loginController = new LoginController();
 app.use('/api/v1',require('./routes/api/user'));
 app.post("/api/authenticate", loginController.postAPI);
 app.use('/api/travels', require('./routes/api/travels'));
+app.use('/api/locations', require('./routes/api/locations'));
 
 //rutas sitio web
 
