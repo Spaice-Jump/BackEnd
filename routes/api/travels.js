@@ -35,10 +35,8 @@ router.get('/:id', async (req, res, next) => {
 
 router.post('/', upload.single('photo'), async (req, res, next) => {
   try {
-    const data = req.body, photo = req.file.filename;
-    console.log('fichero:', req.file);
-    console.log('req.body', req.body);
-    console.log('data', data);
+    const data = req.body;
+    data.photo = req.file.filename; 
     const travel = new Travels(data);
     const result = await travel.save();
     res.json(result);
