@@ -37,7 +37,7 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', upload.single('photo'), async (req, res, next) => {
   try {
     const data = req.body;
-    if (req.file.filename){
+    if (req.file){
       data.photo = req.file.filename; 
     }
     const travel = new Travels(data);
