@@ -57,7 +57,7 @@ class PasswordController {
 
       // Detalles del correo electrónico
       const mailOptions = {
-        from: 'spacejumpkeepcoding@gmail.com',
+        from: process.env.EMAIL_PASSWORD,
         to: email,
         subject: 'Recuperacion Password',
         text: `Le escribimos de la App Space Jump con su nueva contraseña es :  ${passw}`
@@ -68,13 +68,15 @@ class PasswordController {
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           console.log('Error al enviar el correo:', error);
+          res.json({ error:error, msg:'Correo electrónico no enviado' })
         } else {
           console.log('Correo electrónico enviado:', info.response);
+          res.json({ status:200, msg:'Correo electrónico enviado correctamente' });
+
         }
       });
 
       //usuario = {password:'1111'}
-      res.json({ password: usuario.password, pass: passw });
 
       //   const token = await jwt.sign(
       //     { _id: usuario._id },
