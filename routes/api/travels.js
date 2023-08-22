@@ -24,6 +24,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const _id = req.params.id;
+    console.log(req.params);
     const result = await Travels.findOne({ _id: _id });
     res.json(result);
   } catch (err) {
@@ -36,7 +37,9 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', upload.single('photo'), async (req, res, next) => {
   try {
     const data = req.body;
-    data.photo = req.file.filename; 
+    if (req.file.filename){
+      data.photo = req.file.filename; 
+    }
     const travel = new Travels(data);
     const result = await travel.save();
     res.json(result);
