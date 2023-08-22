@@ -13,6 +13,7 @@ require('dotenv').config()
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const LoginController = require('./controller/loginController');
+const PasswordController= require('./controller/passwordController')
 
 require('./lib/connectMongoose');
 
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 const loginController = new LoginController();
+const passwordController = new PasswordController()
 
 /**
  * Rutas del API
@@ -44,6 +46,8 @@ app.use('/api/travels', require('./routes/api/travels'));
 
 app.get('/login', loginController.index);
 app.post('/login', loginController.postAPI);
+app.get('/password', passwordController.index)
+app.post('/password', passwordController.putAPI)
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
