@@ -15,6 +15,7 @@ var usersRouter = require('./routes/users');
 const LoginController = require('./controller/loginController');
 const DeleteUserController = require('./controller/deleteUserController');
 
+
 require('./lib/connectMongoose');
 
 var app = express();
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const loginController = new LoginController();
 const deleteUserController = new DeleteUserController();
 
+
 /**
  * Rutas del API
  */
@@ -43,6 +45,9 @@ app.use('/api/v1',require('./routes/api/user'));
 app.post("/api/authenticate", loginController.postAPI);
 app.use('/api/travels', require('./routes/api/travels'));
 app.use('/api/locations', require('./routes/api/locations'));
+
+ //app.use('/api/deleteUser',require('./routes/api/deleteUser'));
+//app.use('/api/deleteUser',jwtAuthMiddleware.require('./routes/api/deleteUser'));
 
 // app.get('/api/v1/deleteuser', deleteUserController.index);
 // app.delete('/api/v1/deleteuser', deleteUserController.postAPI);
