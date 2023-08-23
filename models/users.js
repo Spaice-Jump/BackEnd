@@ -16,7 +16,6 @@ userSchema.statics.hashPassword = function (password) {
 
 //método de instancia
 userSchema.methods.comparePassword = function (password) {
-
     return bcrypt.compare(password, this.password);
   };
 
