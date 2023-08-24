@@ -15,7 +15,6 @@ var usersRouter = require('./routes/users');
 const LoginController = require('./controller/loginController');
 
 
-
 require('./lib/connectMongoose');
 
 var app = express();
@@ -36,7 +35,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 const loginController = new LoginController();
 
 
-
 /**
  * Rutas del API
  */
@@ -53,6 +51,8 @@ app.use('/api/deleteUser',require('./routes/api/deleteUser'));
 
 app.get('/login', loginController.index);
 app.post('/login', loginController.postAPI);
+app.get('/password', passwordController.index)
+app.post('/password', passwordController.putAPI)
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

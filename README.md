@@ -26,7 +26,10 @@ Install **MongoDB**
 
 **.env** file (sample file: .env.example)
 ```js
-MOGODB_CONNECTION_STR=mongodb://127.0.0.1:27017/spacejump
+MOGODB_CONNECTION_STR=mongodb: //127.0.0.1:27017/spacejump
+JWT_SECRET=jEuSQ33spwG94CqpMRa2UJ2BMCPrgjAKCQ6szeprxnV7f
+EMAIL_PASSWORD=spacejumpkeepcoding@gmail.com
+PASSWOR_REMEMBER=********** // password del correo
 ```
 
 Checking MongoDB
