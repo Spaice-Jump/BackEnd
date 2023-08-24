@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Travels = require('../../models/Travels');
+const upload = require('../../lib/multerConfig');
 
 // GET /api/travels Return all travels.
 
@@ -23,6 +24,7 @@ router.get('/', async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
   try {
     const _id = req.params.id;
+    console.log(req.params);
     const result = await Travels.findOne({ _id: _id });
     res.json(result);
   } catch (err) {
@@ -32,9 +34,12 @@ router.get('/:id', async (req, res, next) => {
 
 // POST /api/travels Create a new travel.
 
-router.post('/', async (req, res, next) => {
+router.post('/', upload.single('photo'), async (req, res, next) => {
   try {
     const data = req.body;
+    if (req.file){
+      data.photo = req.file.filename; 
+    }
     const travel = new Travels(data);
     const result = await travel.save();
     res.json(result);
@@ -64,7 +69,7 @@ router.delete('/:id', async (req, res, next) => {
   try { 
     const _id = req.params.id;
     await Travels.deleteOne({ _id: _id });
-    res.json();
+    res.json("Anuncio borrado correctamente");
   } catch (err) {
     next(err);
   }   
