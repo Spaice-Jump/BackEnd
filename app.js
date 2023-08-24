@@ -14,6 +14,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const LoginController = require('./controller/loginController');
 
+const PasswordController= require('./controller/passwordController')
+const DeleteUserController = require('./controller/deleteUserController');
+
 require('./lib/connectMongoose');
 
 var app = express();
@@ -30,7 +33,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
 const loginController = new LoginController();
+const passwordController = new PasswordController()
+const deleteUserController = new DeleteUserController();
 
 /**
  * Rutas del API
@@ -41,10 +47,15 @@ app.post("/api/authenticate", loginController.postAPI);
 app.use('/api/travels', require('./routes/api/travels'));
 app.use('/api/locations', require('./routes/api/locations'));
 
+// app.get('/api/v1/deleteuser', deleteUserController.index);
+// app.delete('/api/v1/deleteuser', deleteUserController.postAPI);
+
 //rutas sitio web
 
 app.get('/login', loginController.index);
 app.post('/login', loginController.postAPI);
+app.get('/password', passwordController.index)
+app.post('/password', passwordController.putAPI)
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
