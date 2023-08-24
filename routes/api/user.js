@@ -54,48 +54,46 @@ router.post(
 );
 
 // Borrar un User
+// router.post('/deleteuser',
+// upload.array('files'),
+
+// async function (req, res, next) {
+//   try {
 
 
-router.post('/deleteuser',
-upload.array('files'),
-
-async function (req, res, next) {
-  try {
-
-
-    const userId = req.body.userId;
-    const email = req.body.email;
-    const password = req.body.password; 
+//     const userId = req.body.userId;
+//     const email = req.body.email;
+//     const password = req.body.password; 
 
   
   
-    if (email.indexOf('@') === -1) {
-      res.json({ status: 400, message : "Email is not valid"  }); 
-      return
-    }
+//     if (email.indexOf('@') === -1) {
+//       res.json({ status: 400, message : "Email is not valid"  }); 
+//       return
+//     }
 
-     // buscar el usuario en la BD
-     const user = await User.findOne({ email: email });
+//      // buscar el usuario en la BD
+//      const user = await User.findOne({ email: email });
 
     
-     // si no lo encuentro o no coincide la contraseña --> error
-     if (!user || !(await user.comparePassword(password))) {
+//      // si no lo encuentro o no coincide la contraseña --> error
+//      if (!user || !(await user.comparePassword(password))) {
        
-       res.json({ status: 400, error: 'invalid credentials' });
+//        res.json({ status: 400, error: 'invalid credentials' });
 
-       return;
-     }
+//        return;
+//      }
     
-    await User.deleteOne(user)
+//     await User.deleteOne(user)
 
-    res.json({ status:"OK", result: email });
-    return
-  } catch (error) {
+//     res.json({ status:"OK", result: email });
+//     return
+//   } catch (error) {
       
-          res.json({ status: 400, message : "Error Delete User"  }); 
-          return   
-  }
-}
+//           res.json({ status: 400, message : "Error Delete User"  }); 
+//           return   
+//   }
+// }
 
-);
+// );
 module.exports = router;
