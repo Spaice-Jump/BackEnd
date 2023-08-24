@@ -69,7 +69,7 @@ router.delete('/:id', async (req, res, next) => {
   try { 
     const _id = req.params.id;
     await Travels.deleteOne({ _id: _id });
-    res.json();
+    res.json("Anuncio borrado correctamente");
   } catch (err) {
     next(err);
   }   
