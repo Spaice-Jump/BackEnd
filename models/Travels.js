@@ -2,12 +2,12 @@ const moongose = require('mongoose');
 
 const travelsSchema = moongose.Schema({
   topic: String,
+  origin: {type: String, required: true},
+  destination: {type: String, required: true},
   remarks: String,
-  photo: String, //TODO: Image??
-  price: Number,
+  price: {type: Number, required: true},
   forSale: Boolean,
-  origin: String,
-  destination: String,
+  photo: String,
   userId: String,
 });
 
