@@ -18,7 +18,7 @@ async function (req, res, next) {
     const email = req.body.email;
     const password = req.body.password; 
 
-    console.log("pasa por aqui")
+    
   
   
     if (email.indexOf('@') === -1) {

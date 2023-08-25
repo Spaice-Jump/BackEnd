@@ -45,7 +45,8 @@ app.use('/api/v1',require('./routes/api/user'));
 app.post("/api/authenticate", loginController.postAPI);
 app.use('/api/travels', require('./routes/api/travels'));
 app.use('/api/locations', require('./routes/api/locations'));
-app.use('/api/deleteUser',require('./routes/api/deleteUser'));
+app.use('/api/deleteUser',jwtAuthMiddleware,require('./routes/api/deleteUser'));
+app.use('/api/jwtWeb',require('./routes/api/jwtWeb'));
 
 
 
