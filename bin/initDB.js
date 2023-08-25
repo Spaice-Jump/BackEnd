@@ -3,7 +3,7 @@
 var app = require('../app');
 
 const Travel = require('../models/Travels');
-const Location = require('../models/locations')
+const Location = require('../models/locations');
 const connection = require('../lib/connectMongoose');
 
 
