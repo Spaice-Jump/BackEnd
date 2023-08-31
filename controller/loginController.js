@@ -34,7 +34,7 @@ class LoginController {
         }
       );
       
-      res.json({ jwt: token, userId: usuario._id, email: usuario.email });
+      res.json({ jwt: token, userId: usuario._id, email: usuario.email, userName: usuario.user });
 
     } catch (err) {
       next(err);
