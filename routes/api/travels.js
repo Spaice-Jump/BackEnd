@@ -56,11 +56,9 @@ router.put('/:id', upload.array('files'), async (req, res, next) => {
   try {
     const _id = req.params.id;
     const data = req.body;
-    console.log(data);
     const result = await Travels.findOneAndUpdate({ _id: _id }, data, {
       new: true,
     });
-    console.log("result", result);
     res.json(result);
   } catch (err) {
     next(err);
