@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Travels = require('../../models/Travels');
 const uploadPhoto = require('../../lib/multerConfig');
+const FileSystem = require('fs');
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
@@ -70,6 +71,8 @@ router.put('/:id', upload.array('files'), async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try { 
     const _id = req.params.id;
+    const travel = await Travels.findOne({ _id: _id });
+    FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
     await Travels.deleteOne({ _id: _id });
     res.json("Anuncio borrado correctamente");
   } catch (err) {
