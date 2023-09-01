@@ -53,10 +53,15 @@ router.post('/', uploadPhoto.single('photo'), async (req, res, next) => {
 
 // PUT /api/travels/:id Update a travel by id.
 
-router.put('/:id', upload.array('files'), async (req, res, next) => {
+router.put('/:id', uploadPhoto.single('photo'), async (req, res, next) => {
   try {
     const _id = req.params.id;
     const data = req.body;
+    if (req.file){
+      data.photo = req.file.filename; 
+      const oldTravel = await Travels.findOne({ _id: _id });
+      FileSystem.unlinkSync(`public/uploads/${oldTravel.photo}`);
+    }
     const result = await Travels.findOneAndUpdate({ _id: _id }, data, {
       new: true,
     });
@@ -72,7 +77,7 @@ router.delete('/:id', async (req, res, next) => {
   try { 
     const _id = req.params.id;
     const travel = await Travels.findOne({ _id: _id });
-    FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
+/*     FileSystem.unlinkSync(`public/uploads/${travel.photo}`); */
     await Travels.deleteOne({ _id: _id });
     res.json("Anuncio borrado correctamente");
   } catch (err) {
