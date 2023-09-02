@@ -85,4 +85,17 @@ router.delete('/:id', async (req, res, next) => {
   }   
 });
 
+// DELETE /api/travels/deletePhoto/:photoName Delete a photo by name.
+
+router.delete('/deletePhoto/:photoName', async (req, res, next) => {
+  try {
+    const photoName = req.params.photoName;
+    FileSystem.unlinkSync(`public/uploads/${photoName}`);
+    const travel = await Travels.findOneAndUpdate({ photo: photoName }, { photo: null });
+    res.json("Foto borrada correctamente");
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
