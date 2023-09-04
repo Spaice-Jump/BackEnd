@@ -42,6 +42,7 @@ Checking MongoDB
 Initializating data:
 ```sh
 npm run initDB
+# creates user: demo@gmail.com / 1234
 ```
 
 Start in development mode:
