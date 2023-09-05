@@ -27,14 +27,15 @@ class LoginController {
       // si existe y la contrseña coincide
       // crear un token JWT con el _id del usuario dentro
       const token = await jwt.sign(
-        { _id: usuario._id },
+        { _id: usuario._id, email: usuario.email, userName: usuario.user},
         process.env.JWT_SECRET,
         {
           expiresIn: '2d',
         }
+
       );
       
-      res.json({ jwt: token, userId: usuario._id, email: usuario.email, userName: usuario.user });
+      res.json({ jwt: token, _id: usuario._id, email: usuario.email, userName: usuario.user });
 
     } catch (err) {
       next(err);
