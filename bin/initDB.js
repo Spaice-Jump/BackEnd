@@ -7,6 +7,7 @@ var app = require('../app');
 const Travel = require('../models/Travels');
 const Location = require('../models/locations');
 const User = require('../models/users');
+const Favorite = require('../models/favorites');    
 
 const connection = require('../lib/connectMongoose');
 
@@ -17,16 +18,18 @@ main().catch(err => console.log('***There was an error***',err));
 
 async function main() {
 
-    const newUserId = await initUser();
-
+    const [newUserId, newBuyerId] = await initUsers();
+    
     await initLocations();
 
-    await initTravels(newUserId);
+    const newTravelId = await initTravels(newUserId);
+
+    await initFavorites(newBuyerId, newTravelId);
 
     connection.close();
 }
 
-async function initUser() {
+async function initUsers() {
 
     // Deleting previous users
     const deleted = await User.deleteMany();
@@ -39,14 +42,20 @@ async function initUser() {
             email:'demo@gmail.com',
             password: await User.hashPassword('1234'),
         },
+        {
+            user:'Usuario Comprador',
+            email:'buyer@gmail.com',
+            password: await User.hashPassword('1234'),
+        },
 
     ]);
 
     console.log(`***Created ${inserted.length} users.***`)
 
-    // I retrieve _id value from inserted user
+    // I retrieve _id value from inserted users
     const newUserId = inserted[0]._id;
-    return newUserId;
+    const newBuyerId = inserted[1]._id;
+    return [newUserId, newBuyerId];
 }
 
 async function initLocations() {
@@ -117,4 +126,25 @@ async function initTravels(newUserId) {
 
     ]);
     console.log(`***Created ${inserted.length} travels.***`)
+    // I retrieve _id value from inserted travels
+    const newTravelId = inserted[0]._id;
+    return newTravelId;
 }
+
+async function initFavorites(newBuyerId, newTravelId) {
+
+    // Deleting previous favorites
+    const deleted = await Favorite.deleteMany();
+    console.log(`***Deleted ${deleted.deletedCount} favorites.***`);
+
+    // New travels favirites
+    const inserted = await Favorite.insertMany ([
+        {
+            userId: newBuyerId,
+            travelId: newTravelId,
+        },
+    
+    ]);
+    console.log(`***Created ${inserted.length} favorites.***`)
+}
+
