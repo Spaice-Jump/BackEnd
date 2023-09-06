@@ -7,6 +7,7 @@ const travelsSchema = moongose.Schema({
   remarks: String,
   price: {type: Number, required: true},
   forSale: Boolean,
+  active: Boolean,
   photo: String,
   userId: String,
   active: Boolean,

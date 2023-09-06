@@ -83,6 +83,7 @@ async function initTravels(newUserId) {
             forsale: true,
             origin: 'Earth',
             destination: 'Moon',
+            active: true,
             userId: newUserId
         },
         {
@@ -93,6 +94,7 @@ async function initTravels(newUserId) {
             forsale: true,
             origin: 'Earth',
             destination: 'Saturn',
+            active: true,
             userId: newUserId
         },
         {
@@ -103,6 +105,7 @@ async function initTravels(newUserId) {
             forsale: false,
             origin: 'Mars',
             destination: 'Earth',
+            active: true,
             userId: newUserId
         },
 
