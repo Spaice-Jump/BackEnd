@@ -84,7 +84,9 @@ async function initTravels(newUserId) {
             origin: 'Earth',
             destination: 'Moon',
             active: true,
-            userId: newUserId
+            userId: newUserId,
+            userBuyer: null,
+            datetimeCreation: new Date() 
         },
         {
             topic:'Travel to Saturn',
@@ -95,10 +97,12 @@ async function initTravels(newUserId) {
             origin: 'Earth',
             destination: 'Saturn',
             active: true,
-            userId: newUserId
+            userId: newUserId,
+            userBuyer: null,
+            datetimeCreation: new Date()
         },
         {
-            topic:'Coming back from Mars',
+            topic:'Coming back from Mars (2)',
             remarks:'I need to come back from Mars to the Earth',
             photo: null,
             price: 1500,
@@ -106,9 +110,11 @@ async function initTravels(newUserId) {
             origin: 'Mars',
             destination: 'Earth',
             active: true,
-            userId: newUserId
+            userId: newUserId,
+            userBuyer: null,
+            datetimeCreation: new Date()
         },
 
     ]);
-    console.log(`***Created ${inserted.length} travels.***`)
+    console.log(`***Created ${inserted.length} travels (with datatimeCreation).***`)
 }
