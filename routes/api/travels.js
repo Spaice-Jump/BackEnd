@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Travels = require('../../models/Travels');
+const User = require('../../models/users');
 const uploadPhoto = require('../../lib/multerConfig');
 const FileSystem = require('fs');
 
@@ -107,5 +108,30 @@ router.put("/buy/:id", async (req, res, next) => {
     next(err);
   }
 });
+
+// GET /api/users/:user Return a travels find by user.
+
+router.post('/users',
+upload.array('files'),
+
+async function (req, res, next) {
+  try {
+
+    const user = req.body.user;
+    
+    const userData = await User.findOne({ user: user });
+    const userId = userData._id;
+    const travels = await Travels.find({ userId: userId });
+     
+    res.json({ status:"OK", result: travels });
+    return
+  } catch (error) {
+      
+    res.json({ status: 400, message : "User Not Exist"  }); 
+    return   
+  }
+}
+
+);
 
 module.exports = router;
