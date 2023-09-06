@@ -98,4 +98,14 @@ router.delete('/deletePhoto/:photoName', async (req, res, next) => {
   }
 });
 
+router.put("/buy/:id", async (req, res, next) => {
+  try {
+    const _id = req.params.id;
+    const result = await Travels.findOneAndUpdate({ _id: _id }, {active: false}, {new: true});
+    res.json(result);
+  } catch (err) {
+    next(err);
+  }
+});
+
 module.exports = router;
