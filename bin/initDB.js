@@ -77,44 +77,44 @@ async function initTravels(newUserId) {
     const inserted = await Travel.insertMany ([
         {
             topic:'Travel to the Moon',
+            active: true,
+            userId: newUserId,
             remarks:'Beautiful travel to the Moon',
             photo: null,
             price: 500,
             forsale: true,
             origin: 'Earth',
             destination: 'Moon',
-            active: true,
-            userId: newUserId,
             userBuyer: null,
-            datetimeCreation: new Date() 
+            datetimeCreation: new Date()
         },
         {
             topic:'Travel to Saturn',
+            active: true,
+            userId: newUserId,
             remarks:'Beautiful travel to Saturn',
             photo: null,
             price: 2500,
             forsale: true,
             origin: 'Earth',
             destination: 'Saturn',
-            active: true,
-            userId: newUserId,
             userBuyer: null,
             datetimeCreation: new Date()
         },
         {
-            topic:'Coming back from Mars (2)',
+            topic:'Coming back from Mars',
+            active: true,
+            userId: newUserId,
             remarks:'I need to come back from Mars to the Earth',
             photo: null,
             price: 1500,
             forsale: false,
             origin: 'Mars',
             destination: 'Earth',
-            active: true,
-            userId: newUserId,
             userBuyer: null,
             datetimeCreation: new Date()
         },
 
     ]);
-    console.log(`***Created ${inserted.length} travels (with datatimeCreation).***`)
+    console.log(`***Created ${inserted.length} travels.***`)
 }
