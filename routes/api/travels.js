@@ -78,7 +78,7 @@ router.delete('/:id', async (req, res, next) => {
   try { 
     const _id = req.params.id;
     const travel = await Travels.findOne({ _id: _id });
-/*     FileSystem.unlinkSync(`public/uploads/${travel.photo}`); */
+    FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
     await Travels.deleteOne({ _id: _id });
     res.json("Anuncio borrado correctamente");
   } catch (err) {
@@ -102,7 +102,8 @@ router.delete('/deletePhoto/:photoName', async (req, res, next) => {
 router.put("/buy/:id", async (req, res, next) => {
   try {
     const _id = req.params.id;
-    const result = await Travels.findOneAndUpdate({ _id: _id }, {active: false}, {new: true});
+    const buyerId = req.body;
+    const result = await Travels.findOneAndUpdate({ _id: _id }, {active: false}, {userBuyer: buyerId},{new: true});
     res.json(result);
   } catch (err) {
     next(err);
