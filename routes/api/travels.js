@@ -17,8 +17,15 @@ router.get('/', async (req, res, next) => {
     const skip = parseInt(req.query.skip);
     const sort = req.query.sort;
     const select = req.query.select;
-    const result = await Travels.list(filter, limit, skip, sort, select);
-    res.json(result);
+    let result = await Travels.list(filter, limit, skip, sort, select);
+    let data = [];
+    for (let i = 0; i < result.length; i++) {
+      const user = await User.findOne({ _id: result[i].userId });
+      result[i].userName = user.user;
+
+    }
+    
+    res.json(result); 
   } catch (err) {
     next(err);
   }

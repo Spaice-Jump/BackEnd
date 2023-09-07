@@ -10,9 +10,11 @@ const travelsSchema = moongose.Schema({
   active: Boolean,
   photo: String,
   userId: String,
+  userName: String,
   active: Boolean,
   userBuyer: String,
   datetimeCreation: Date,
+
 });
 
 travelsSchema.statics.list = function(filter, limit, skip, sort, select) {
