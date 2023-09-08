@@ -20,13 +20,13 @@ router.get('/', async (req, res, next) => {
     const select = req.query.select;
     let result = await Travels.list(filter, limit, skip, sort, select);
     let data = [];
+
     for (let i = 0; i < result.length; i++) {
       const user = await User.findOne({ _id: result[i].userId });
       result[i].userName = user.user;
-
     }
-    
-    res.json(result); 
+
+    res.json(result);
   } catch (err) {
     next(err);
   }
@@ -49,10 +49,14 @@ router.get('/:id', async (req, res, next) => {
 router.post('/', uploadPhoto.single('photo'), async (req, res, next) => {
   try {
     const data = req.body;
-    if (req.file){
-      data.photo = req.file.filename; 
+    if (req.file) {
+      data.photo = req.file.filename;
     }
+
+    const user = await User.findOne({ _id: data.userId });
+    data.userName = user.user;
     const travel = new Travels(data);
+    
     const result = await travel.save();
     res.json(result);
   } catch (err) {
