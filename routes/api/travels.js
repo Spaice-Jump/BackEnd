@@ -85,8 +85,10 @@ router.put('/:id', uploadPhoto.single('photo'), async (req, res, next) => {
 router.delete('/:id', async (req, res, next) => {
   try { 
     const _id = req.params.id;
+    
     const travel = await Travels.findOne({ _id: _id });
-    FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
+    //FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
+    
     await Travels.deleteOne({ _id: _id });
     res.json("Anuncio borrado correctamente");
   } catch (err) {
