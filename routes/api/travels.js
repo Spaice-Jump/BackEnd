@@ -6,6 +6,7 @@ const uploadPhoto = require('../../lib/multerConfig');
 const FileSystem = require('fs');
 
 const multer = require('multer');
+
 const upload = multer({ dest: 'uploads/' });
 
 // GET /api/travels Return all travels.
@@ -117,7 +118,7 @@ router.put("/buy/:id", async (req, res, next) => {
   }
 });
 
-// GET /api/users/:user Return a travels find by user.
+// POST /api/users/:user Return a travels find by user.
 
 router.post('/users',
 upload.array('files'),
@@ -141,5 +142,8 @@ async function (req, res, next) {
 }
 
 );
+
+
+
 
 module.exports = router;
