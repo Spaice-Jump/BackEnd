@@ -123,9 +123,13 @@ router.delete('/deletePhoto/:photoName', async (req, res, next) => {
 router.put("/buy/:id", async (req, res, next) => {
   try {
     const _id = req.params.id;
-    const buyerId = req.body;
-    const result = await Travels.findOneAndUpdate({ _id: _id }, {active: false}, {userBuyer: buyerId},{new: true});
+    const userBuyer = req.body;
+    console.log("req.body", req.body);
+    update = { active: false, userBuyer: userBuyer.userBuyer};
+    console.log("update", update);
+    const result = await Travels.findOneAndUpdate({ _id: _id }, update ,{new: true});
     res.json(result);
+    console.log("result", result);
   } catch (err) {
     next(err);
   }
