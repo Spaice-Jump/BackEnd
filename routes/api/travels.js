@@ -73,7 +73,9 @@ router.put('/:id', uploadPhoto.single('photo'), async (req, res, next) => {
     if (req.file){
       data.photo = req.file.filename; 
       const oldTravel = await Travels.findOne({ _id: _id });
-      FileSystem.unlinkSync(`public/uploads/${oldTravel.photo}`);
+      if(oldTravel.photo){
+        FileSystem.unlinkSync(`public/uploads/${oldTravel.photo}`);
+      }
     }
     const result = await Travels.findOneAndUpdate({ _id: _id }, data, {
       new: true,
@@ -91,7 +93,10 @@ router.delete('/:id', async (req, res, next) => {
     const _id = req.params.id;
     
     const travel = await Travels.findOne({ _id: _id });
-    //FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
+
+    if (travel.photo){
+      FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
+    }
     
     await Travels.deleteOne({ _id: _id });
     res.json("Anuncio borrado correctamente");
@@ -112,6 +117,8 @@ router.delete('/deletePhoto/:photoName', async (req, res, next) => {
     next(err);
   }
 });
+
+// PUT /api/travels/buy/:id buy a travel by id.
 
 router.put("/buy/:id", async (req, res, next) => {
   try {
