@@ -82,6 +82,9 @@ async function initTravels(newUserId) {
     const deleted = await Travel.deleteMany();
     console.log(`***Deleted ${deleted.deletedCount} travels.***`);
 
+    var fechaActual = new Date();
+    fechaActual.setMonth(fechaActual.getMonth() + 1);
+
     // New travels creation
     const inserted = await Travel.insertMany ([
         {
@@ -98,6 +101,9 @@ async function initTravels(newUserId) {
             userBuyer: null,
             datetimeCreation: new Date(),
             favorite: false,
+            datetimeDeparture: fechaActual,
+            availableSeats: 3,
+            soldSeats: 0,
         },
         {
             topic:'Travel to Saturn',
@@ -113,7 +119,9 @@ async function initTravels(newUserId) {
             userBuyer: null,
             datetimeCreation: new Date(),
             favorite: false,
-        },
+            datetimeDeparture: fechaActual,
+            availableSeats: 2,
+            soldSeats: 0,        },
         {
             topic:'Coming back from Mars',
             active: true,
@@ -128,7 +136,9 @@ async function initTravels(newUserId) {
             userBuyer: null,
             datetimeCreation: new Date(),
             favorite: false,
-        },
+            datetimeDeparture: fechaActual,
+            availableSeats: 1,
+            soldSeats: 0,        },
 
     ]);
     console.log(`***Created ${inserted.length} travels.***`)
