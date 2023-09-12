@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../../models/users');
+const Travels = require('../../models/Travels');
+const Favorites = require('../../models/favorites');
 
 
 const multer = require('multer');
@@ -39,6 +41,8 @@ async function (req, res, next) {
      }
     
     await User.deleteOne(user)
+    await Favorites.deleteMany({ userId: userId });
+    await Travels.deleteMany({ userId: userId });
 
     res.json({ status:"OK", result: email });
     return
