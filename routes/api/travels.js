@@ -24,7 +24,17 @@ router.get('/', async (req, res, next) => {
     for (let i = 0; i < result.length; i++) {
       const user = await User.findOne({ _id: result[i].userId });
       result[i].userName = user.user;
-      const favorite = await Favorites.findOne({ userId: req.query.userId, travelId: result[i]._id });
+    
+      const idString = result[i]._id.toString();
+
+
+      console.log("userId",result[i].userId)
+      console.log("travelId",idString)
+
+      const favorite = await Favorites.findOne({ userId: result[i].userId, travelId:idString });
+
+      console.log(favorite)
+
       if (favorite) {result[i].favorite = true;}else{result[i].favorite = false;}
         
 
