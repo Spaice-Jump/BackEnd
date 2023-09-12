@@ -14,29 +14,58 @@ const upload = multer({ dest: 'uploads/' });
 
 router.get('/', async (req, res, next) => {
   try {
+
     const filter = {};
     const limit = parseInt(req.query.limit);
     const skip = parseInt(req.query.skip);
     const sort = { datetimeCreation: 'desc'};
     const select = req.query.select;
     let result = await Travels.list(filter, limit, skip, sort, select);
-    for (let i = 0; i < result.length; i++) {
-        const user = await User.findOne({ _id: result[i].userId });
-        result[i].userName = user.user;
-        const idString = travelId._id.toString();
+    
 
-        console.log("travel",idString)
-        console.log("user",req.query.userId)
+		for (let i = 0; i < result.length; i++) {
+			const user = await User.findOne({ _id: result[i].userId });
+			result[i].userName = user.user;
+            
 
-        const favorite = await Favorites.findOne({ userId: req.query.userId, travelId: idString });
-        if (favorite) {result[i].favorite = true;}else{result[i].favorite = false;}
-          
-  
-      }
+            const idString = result[i]._id.toString();
+   
+             const favorite = await Favorites.findOne({ userId: req.query.userId, travelId: idString });
+   
+             if (favorite) {result[i].favorite = true;}else{result[i].favorite = false;}
+
+		}
+
 		res.json(result);
 	} catch (err) {
 		next(err);
 	}
+
+
+
+    // const filter = {};
+    // const limit = parseInt(req.query.limit);
+    // const skip = parseInt(req.query.skip);
+    // const sort = { datetimeCreation: 'desc'};
+    // const select = req.query.select;
+    // let result = await Travels.list(filter, limit, skip, sort, select);
+    // for (let i = 0; i < result.length; i++) {
+    //     const user = await User.findOne({ _id: result[i].userId });
+    //     result[i].userName = user.user;
+    //     const idString = travelId._id.toString();
+
+    //     console.log("travel",idString)
+    //     console.log("user",req.query.userId)
+
+    //     const favorite = await Favorites.findOne({ userId: req.query.userId, travelId: idString });
+    //     if (favorite) {result[i].favorite = true;}else{result[i].favorite = false;}
+          
+  
+    //   }
+	// 	res.json(result);
+	// } catch (err) {
+	// 	next(err);
+	// }
 });
 
 // GET /api/travels/:id Return a travel find by id.
