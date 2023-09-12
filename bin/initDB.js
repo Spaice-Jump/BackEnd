@@ -96,7 +96,8 @@ async function initTravels(newUserId) {
             origin: 'Earth',
             destination: 'Moon',
             userBuyer: null,
-            datetimeCreation: new Date()
+            datetimeCreation: new Date(),
+            favorite: false,
         },
         {
             topic:'Travel to Saturn',
@@ -110,7 +111,8 @@ async function initTravels(newUserId) {
             origin: 'Earth',
             destination: 'Saturn',
             userBuyer: null,
-            datetimeCreation: new Date()
+            datetimeCreation: new Date(),
+            favorite: false,
         },
         {
             topic:'Coming back from Mars',
@@ -124,7 +126,8 @@ async function initTravels(newUserId) {
             origin: 'Mars',
             destination: 'Earth',
             userBuyer: null,
-            datetimeCreation: new Date()
+            datetimeCreation: new Date(),
+            favorite: false,
         },
 
     ]);

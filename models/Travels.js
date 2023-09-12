@@ -14,6 +14,7 @@ const travelsSchema = moongose.Schema({
   active: Boolean,
   userBuyer: String,
   datetimeCreation: Date,
+  favorite: Boolean,
 
 });
 
