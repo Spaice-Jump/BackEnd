@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 
 const chatsSchema = mongoose.Schema({
-    userId: {type: String, required: true}, // usuario que envia el mensaje
     travelId: {type: String, required: true},
-    datetime: {type: Date, required: true},
+    fromUserId: {type: String, required: true}, // usuario que envia el mensaje
+    toUserId: {type: String, required: true}, // usuario que envia el mensaje
+    chatDatetime: {type: Date, required: true},
     chatText: {type: String, required: true},
-    readByuser: {type: Boolean, required: true}, // cuando lo leee el otro usuario: true
+    readByUser: {type: Boolean, required: true}, // cuando lo lee el otro usuario: true, el usuario destinatario
 });
 
 chatsSchema.statics.list = function(filter, limit, skip, sort, select) {

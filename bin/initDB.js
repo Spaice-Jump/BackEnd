@@ -8,6 +8,7 @@ const Travel = require('../models/Travels');
 const Location = require('../models/locations');
 const User = require('../models/users');
 const Favorite = require('../models/favorites');    
+const Chat = require('../models/chats');
 
 const connection = require('../lib/connectMongoose');
 
@@ -23,6 +24,8 @@ async function main() {
     await initLocations();
 
     const newTravelId = await initTravels(newUserId);
+
+    await initChat(newUserId, newBuyerId, newTravelId);
 
     await initFavorites(newBuyerId, newTravelId);
 
@@ -121,7 +124,8 @@ async function initTravels(newUserId) {
             favorite: false,
             datetimeDeparture: fechaActual,
             availableSeats: 2,
-            soldSeats: 0,        },
+            soldSeats: 0,        
+        },
         {
             topic:'Coming back from Mars',
             active: true,
@@ -138,13 +142,43 @@ async function initTravels(newUserId) {
             favorite: false,
             datetimeDeparture: fechaActual,
             availableSeats: 1,
-            soldSeats: 0,        },
-
+            soldSeats: 0,        
+        },
     ]);
     console.log(`***Created ${inserted.length} travels.***`)
     // I retrieve _id value from inserted travels
     const newTravelId = inserted[0]._id;
     return newTravelId;
+}
+
+async function initChat(newUserId, newBuyerId, newTravelId) {
+    
+    // Deleting previos chats
+    const deleted = await Chat.deleteMany();
+    console.log(`***Deleted ${deleted.deletedCount} chats.***`);
+
+    // new chats
+    const inserted = await Chat.insertMany ([
+        {
+            travelId: newTravelId,
+            fromUserId: newBuyerId,
+            toUserId: newUserId,
+            chatDatetime: new Date(),
+            chatText: "Este es un mensaje para solicitar más información sobre el viaje",
+            readByUser: true,
+        },
+        {
+            travelId: newTravelId,
+            fromUserId: newUserId,
+            toUserId: newBuyerId,
+            chatDatetime: new Date(),
+            chatText: "Pues se trata de un viaje en clase turista  de 2h de duración.",
+            readByUser: true,
+        },
+    ]);
+
+    console.log(`***Created ${inserted.length} chats.***`)
+
 }
 
 async function initFavorites(newBuyerId, newTravelId) {
@@ -153,7 +187,7 @@ async function initFavorites(newBuyerId, newTravelId) {
     const deleted = await Favorite.deleteMany();
     console.log(`***Deleted ${deleted.deletedCount} favorites.***`);
 
-    // New travels favirites
+    // New travels favorites
     const inserted = await Favorite.insertMany ([
         {
             userId: newBuyerId,
