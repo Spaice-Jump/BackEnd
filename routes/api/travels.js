@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Travels = require('../../models/Travels');
 const User = require('../../models/users');
+const Favorites = require('../../models/favorites');
 const uploadPhoto = require('../../lib/multerConfig');
 const FileSystem = require('fs');
 
@@ -19,10 +20,13 @@ router.get('/', async (req, res, next) => {
     const sort = req.query.sort;
     const select = req.query.select;
     let result = await Travels.list(filter, limit, skip, sort, select);
-    let data = [];
+    
     for (let i = 0; i < result.length; i++) {
       const user = await User.findOne({ _id: result[i].userId });
       result[i].userName = user.user;
+      const favorite = await Favorites.findOne({ userId: req.query.userId, travelId: result[i]._id });
+      if (favorite) {result[i].favorite = true;}else{result[i].favorite = false;}
+        
 
     }
     
@@ -52,6 +56,7 @@ router.post('/', uploadPhoto.single('photo'), async (req, res, next) => {
     if (req.file){
       data.photo = req.file.filename; 
     }
+    data.favorite = false;
     const travel = new Travels(data);
     const result = await travel.save();
     res.json(result);

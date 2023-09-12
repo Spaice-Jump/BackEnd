@@ -14,7 +14,7 @@ const travelsSchema = moongose.Schema({
   active: Boolean,
   userBuyer: String,
   datetimeCreation: Date,
-
+  favorite: Boolean,
 });
 
 travelsSchema.statics.list = function(filter, limit, skip, sort, select) {
