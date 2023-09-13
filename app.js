@@ -51,7 +51,7 @@ app.use('/api/travels', require('./routes/api/travels'));
 app.use('/api/locations', require('./routes/api/locations'));
 app.use('/api/deleteUser',jwtAuthMiddleware,require('./routes/api/deleteUser'));
 app.use('/api/jwtWeb',require('./routes/api/jwtWeb'));
-app.use('/api/favorites', require('./routes/api/favorites'));
+app.use('/api/favorites',jwtAuthMiddleware, require('./routes/api/favorites'));
 
 
 
