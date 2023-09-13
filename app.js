@@ -15,7 +15,8 @@ var usersRouter = require('./routes/users');
 
 const LoginController = require('./controller/loginController');
 const PasswordController= require('./controller/passwordController')
-const UpdateUserController= require('./controller/updateUserController')
+const UpdateUserController= require('./controller/updateUserController');
+const PasswordLinkController = require('./controller/passwordLinkController');
 
 
 require('./lib/connectMongoose');
@@ -38,6 +39,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const loginController = new LoginController();
 const passwordController = new PasswordController()
 const updateUserController= new UpdateUserController()
+const passwordLinkController = new PasswordLinkController()
 
 /**
  * Rutas del API
@@ -60,6 +62,7 @@ app.post('/login', loginController.postAPI);
 app.get('/password', passwordController.index)
 app.post('/password', passwordController.putAPI)
 app.post('/update', updateUserController.updateUser)
+app.use('/recorderPassword', passwordLinkController.getAPI )
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

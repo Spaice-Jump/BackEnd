@@ -1,21 +1,6 @@
 const Usuario = require('../models/users.js');
 const User = require('../models/users');
 const nodemailer = require('nodemailer');
-
-function generateRandomPassword(length = 12) {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-  let password = '';
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    password += characters.charAt(randomIndex);
-  }
-  return password;
-}
-
-const randomPassword = generateRandomPassword();
-console.log(randomPassword);
-
 class PasswordController {
   index(req, res, next) {
     res.locals.error = '';
@@ -25,16 +10,13 @@ class PasswordController {
   async putAPI(req, res, next) {
     try {
       const { email } = req.body;
+      console.log('email', email)
 
       // buscar el usuario en la BD
-      //const usuario = await Usuario.findOne({ email: email });
-      const passw = generateRandomPassword();
-      const usuario = await Usuario.findOneAndUpdate(
-        { email: email },
-        { password: await User.hashPassword(passw) }
-      );
+      const usuario = await Usuario.findOne({ email: email });
+      
 
-      // si no lo encuentro o no coincide la contraseña --> error
+      // si no lo encuentro --> error
       if (!usuario) {
         res.json({
           status: 400,
@@ -44,7 +26,27 @@ class PasswordController {
         return;
       }
 
-      // si existe mandar el email
+      // si existe mandar crear token y el email
+
+      const token = await jwt.sign(
+        { _id: usuario._id, email: usuario.email, userName: usuario.user},
+        process.env.JWT_SECRET,
+        {
+          expiresIn: '1s',
+        }
+
+      );
+
+      const port = 3000;
+      
+      // Configura nodemailer para enviar correos electrónicos
+      
+    
+      
+        // Construye la URL completa con el token
+        const fullURL = `http://localhost:${port}/updateUser/${token}`;
+        console.log('completa', fullURL)
+
 
       // Configura el transporte de correo
       const transporter = nodemailer.createTransport({
@@ -60,7 +62,7 @@ class PasswordController {
         from: process.env.EMAIL_PASSWORD,
         to: email,
         subject: 'Recuperacion Password',
-        text: `Le escribimos de la App Space Jump con su nueva contraseña es :  ${passw}`
+        text: `Le escribimos de la App Space Jump con su nueva contraseña es :  ${fullURL}`
         //passw,
       };
 
@@ -75,22 +77,12 @@ class PasswordController {
 
         }
       });
+      res.json({ jwt: token, _id: usuario._id, email: usuario.email, userName: usuario.user });
 
-      //usuario = {password:'1111'}
-
-      //   const token = await jwt.sign(
-      //     { _id: usuario._id },
-      //     process.env.JWT_SECRET,
-      //     {
-      //       expiresIn: '2d',
-      //     }
-      //   );
-
-      //   res.json({ jwt: token, userId: usuario._id });
     } catch (err) {
+      console.log(err)
       next(err);
     }
   }
 }
-
 module.exports = PasswordController;
