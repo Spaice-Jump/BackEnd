@@ -39,10 +39,15 @@ async function (req, res, next) {
 
        return;
      }
-    
+
+     const user_Id = user._id;
+     
     await User.deleteOne(user)
-    await Favorites.deleteMany({ userId: userId });
-    await Travels.deleteMany({ userId: userId });
+    
+    await Favorites.deleteMany({ userId: user_Id });
+    
+    await Travels.deleteMany({ userId: user_Id });
+    
 
     res.json({ status:"OK", result: email });
     return
