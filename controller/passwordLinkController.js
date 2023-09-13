@@ -15,7 +15,8 @@ class PasswordLinkController {
   async getAPI(req, res, next){
     try{
       // Captura el token de la URL
-      const token = req.body.token;
+      console.log('body', req.params)
+      const token = req.params.token;
     
       // Realiza la lógica que necesites con el token
       console.log('Token recibido:', token);

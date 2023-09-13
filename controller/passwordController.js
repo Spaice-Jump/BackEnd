@@ -33,7 +33,7 @@ class PasswordController {
         { _id: usuario._id, email: usuario.email, userName: usuario.user},
         process.env.JWT_SECRET,
         {
-          expiresIn: '1s',
+          expiresIn: '1h',
         }
 
       );
