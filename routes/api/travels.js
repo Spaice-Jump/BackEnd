@@ -23,7 +23,7 @@ router.get('/', async (req, res, next) => {
     const select = req.query.select;
     const jwtToken = req.get('Authorization') || req.body.jwt || req.query.jwt;
     const viewJwt = revieJwtoken(jwtToken);
-    console.log(viewJwt);
+    
 
     let result = await Travels.list(filter, limit, skip, sort, select);
 
