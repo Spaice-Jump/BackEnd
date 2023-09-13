@@ -6,7 +6,7 @@ const Favorites = require('../../models/favorites');
 const upload = multer({ dest: 'uploads/' });
 const Travels = require('../../models/Travels');
 
-// POST /api/users/:user Return a travels find by favorites.
+// POST /api/favorites Return a travels find by favorites.
 
 router.post('/',
 upload.array('files'),
@@ -25,6 +25,7 @@ async function (req, res, next) {
     let data = [];
 
     for (let i = 0; i < travels.length; i++) {
+        
         let travel = await Travels.findOne({ _id: travels[i].travelId });
         travel.favorite = true;
         data.push(travel);
@@ -42,7 +43,7 @@ async function (req, res, next) {
 
 );
 
-// POST /api/users/:user Add a travels find by favorites.
+// POST /api/favorites/setForFavorite Add a travels find by favorites.
 
 router.post('/setForFavorite',
 upload.array('files'),
