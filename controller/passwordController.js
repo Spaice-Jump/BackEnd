@@ -1,6 +1,7 @@
 const Usuario = require('../models/users.js');
 const User = require('../models/users');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 class PasswordController {
   index(req, res, next) {
     res.locals.error = '';
@@ -44,7 +45,7 @@ class PasswordController {
     
       
         // Construye la URL completa con el token
-        const fullURL = `http://localhost:${port}/updateUser/${token}`;
+        const fullURL = `http://localhost:${port}/recorderPassword/${token}`;
         console.log('completa', fullURL)
 
 
