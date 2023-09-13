@@ -78,7 +78,7 @@ class PasswordController {
 
         }
       });
-      res.json({ jwt: token, _id: usuario._id, email: usuario.email, userName: usuario.user });
+      res.json({ jwt: token, _id: usuario._id, email: usuario.email, userName: usuario.user, msg:'Correo electrónico enviado correctamente' });
 
     } catch (err) {
       console.log(err)
