@@ -64,7 +64,7 @@ class PasswordController {
         from: process.env.EMAIL_PASSWORD,
         to: email,
         subject: 'Recuperacion Password',
-        text: `Le escribimos de la App Space Jump con su nueva contraseña es :  ${fullURL}`
+        text: `Le escribimos de la App Space Jump para reestablecer la contraseña pinche el siguiente link:  ${fullURL}`
         //passw,
       };
 
