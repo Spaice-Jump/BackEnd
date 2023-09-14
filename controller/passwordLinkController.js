@@ -2,7 +2,6 @@ const Usuario = require('../models/users.js');
 const User = require('../models/users');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const axios = require("axios");
 
 
 class PasswordLinkController {
