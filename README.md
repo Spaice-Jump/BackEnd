@@ -27,6 +27,7 @@ Install **MongoDB**
 **.env** file (sample file: .env.example)
 ```js
 MOGODB_CONNECTION_STR=mongodb: //127.0.0.1:27017/spacejump
+SERVER_URL=http://localhost:3000
 JWT_SECRET=********** // secreto para el JWT
 EMAIL_PASSWORD=*********** // eMail que envía los correos
 PASSWOR_REMEMBER=********** // password del correo

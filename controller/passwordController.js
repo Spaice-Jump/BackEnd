@@ -45,7 +45,8 @@ class PasswordController {
     
       
         // Construye la URL completa con el token
-        const fullURL = `http://localhost:${port}/recorderPassword/${token}`;
+        const server_URL = process.env.SERVER_URL;
+        const fullURL = `${server_URL}/recorderPassword/${token}`;
         console.log('completa', fullURL)
 
 
