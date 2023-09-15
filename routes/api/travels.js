@@ -1,14 +1,14 @@
-// const express = require('express');
-// const router = express.Router();
-// const Travels = require('../../models/Travels');
-// const User = require('../../models/users');
-// const uploadPhoto = require('../../lib/multerConfig');
-// const FileSystem = require('fs');
-// const Favorites = require('../../models/favorites');
-// const jwt = require('jsonwebtoken');
-
-// const multer = require('multer');
-// const revieJwtoken = require('../../lib/revieJwtoken');
+const express = require('express');
+const router = express.Router();
+const Travels = require('../../models/Travels');
+const User = require('../../models/users');
+const uploadPhoto = require('../../lib/multerConfig');
+const FileSystem = require('fs');
+const Favorites = require('../../models/favorites');
+const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
+const multer = require('multer');
+const revieJwtoken = require('../../lib/revieJwtoken');
 
 // const upload = multer({ dest: 'uploads/' });
 
@@ -150,20 +150,65 @@
 
 // // PUT /api/travels/buy/:id buy a travel by id.
 
-// router.put('/buy/:id', async (req, res, next) => {
-// 	try {
-// 		const _id = req.params.id;
-// 		const userBuyer = req.body;
-// 		update = { active: false, userBuyer: userBuyer.userBuyer };
-// 		const result = await Travels.findOneAndUpdate({ _id: _id }, update, {
-//       new: true,
-// 		});
-// 		res.json(result);
-// 		console.log('result', result);
-// 	} catch (err) {
-//     next(err);
-// 	}
-// });
+router.put('/buy/:id', async (req, res, next) => {
+	try {
+		const _id = req.params.id;
+		const userBuyer = req.body;
+		console.log('userbyrer', userBuyer)
+		const usuario = await User.findById({_id:userBuyer.userBuyer})
+		console.log('usuariooo',usuario)
+		update = { active: false, userBuyer: userBuyer.userBuyer };
+		const result = await Travels.findOneAndUpdate({ _id: _id }, update, {
+      new: true,
+		});
+		const email = usuario.email
+		const travel = await Travels.findById({_id:_id})
+		console.log('travelssss', travel)
+		// Configura nodemailer para enviar correos electrónicos
+      
+      // Configura el transporte de correo
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: process.env.EMAIL_PASSWORD,    
+          pass: process.env.PASSWOR_REMEMBER  
+        },
+      });
+
+      // Detalles del correo electrónico
+      const mailOptions = {
+        from: process.env.EMAIL_PASSWORD,
+        to: email,
+        subject: 'Comprado Viaje Satisfactoriamente',
+        text: `Le escribimos de la App Space Jump para comunicarle que su viaje se a comprado satisfactoriamente tenga un viaje al espacio feliz
+		Le adjuntamos detalles de la compra:
+		Titulo: ${travel.topic}
+		Origen: ${travel.origin}
+		Destino: ${travel.destination}
+		Precio:${travel.price}
+		Fecha Salida: ${travel.datetimeDeparture}
+		`
+        //passw,
+      };
+
+      // Envía el correo electrónico
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log('Error al enviar el correo:', error);
+          res.json({ error:error, msg:'Correo electrónico no enviado' })
+        } else {
+          console.log('Correo electrónico enviado:', info.response);
+          res.json({ status:200, msg:'Correo electrónico enviado correctamente' });
+
+        }
+	})
+
+		res.json(result);
+		console.log('result', result);
+	} catch (err) {
+    next(err);
+	}
+});
 
 // // PUT /api/travels/active/:id active a travel by id.
 
