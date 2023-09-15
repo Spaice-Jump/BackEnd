@@ -1,207 +1,207 @@
-const express = require('express');
-const router = express.Router();
-const Travels = require('../../models/Travels');
-const User = require('../../models/users');
-const uploadPhoto = require('../../lib/multerConfig');
-const FileSystem = require('fs');
-const Favorites = require('../../models/favorites');
-const jwt = require('jsonwebtoken');
+// const express = require('express');
+// const router = express.Router();
+// const Travels = require('../../models/Travels');
+// const User = require('../../models/users');
+// const uploadPhoto = require('../../lib/multerConfig');
+// const FileSystem = require('fs');
+// const Favorites = require('../../models/favorites');
+// const jwt = require('jsonwebtoken');
 
-const multer = require('multer');
-const revieJwtoken = require('../../lib/revieJwtoken');
+// const multer = require('multer');
+// const revieJwtoken = require('../../lib/revieJwtoken');
 
-const upload = multer({ dest: 'uploads/' });
+// const upload = multer({ dest: 'uploads/' });
 
-// GET /api/travels Return all travels.
+// // GET /api/travels Return all travels.
 
-router.get('/', async (req, res, next) => {
-  try {
-    const filter = {};
-    const limit = parseInt(req.query.limit);
-    const skip = parseInt(req.query.skip);
-    const sort = { datetimeCreation: 'desc' };
-    const select = req.query.select;
-    const jwtToken = req.get('Authorization') || req.body.jwt || req.query.jwt;
-    const viewJwt = revieJwtoken(jwtToken);
+// router.get('/', async (req, res, next) => {
+//   try {
+//     const filter = {};
+//     const limit = parseInt(req.query.limit);
+//     const skip = parseInt(req.query.skip);
+//     const sort = { datetimeCreation: 'desc' };
+//     const select = req.query.select;
+//     const jwtToken = req.get('Authorization') || req.body.jwt || req.query.jwt;
+//     const viewJwt = revieJwtoken(jwtToken);
     
 
-    let result = await Travels.list(filter, limit, skip, sort, select);
+//     let result = await Travels.list(filter, limit, skip, sort, select);
 
-    for (let i = 0; i < result.length; i++) {
-      try {
-        const user = await User.findOne({ _id: result[i].userId });
+//     for (let i = 0; i < result.length; i++) {
+//       try {
+//         const user = await User.findOne({ _id: result[i].userId });
 
-        result[i].userName = user.user;
+//         result[i].userName = user.user;
 
-        if (viewJwt !== null) {
-          const idString = result[i]._id.toString();
-          const user_id = viewJwt;
-          const favorite = await Favorites.findOne({
-            userId: user_id,
-            travelId: idString,
-          });
+//         if (viewJwt !== null) {
+//           const idString = result[i]._id.toString();
+//           const user_id = viewJwt;
+//           const favorite = await Favorites.findOne({
+//             userId: user_id,
+//             travelId: idString,
+//           });
 
-          if (favorite) {
-            result[i].favorite = true;
-          } else {
-            result[i].favorite = false;
-          }
-        }
-      } catch (error) {
-        result[i].userName = 'space user';
-        result[i].favorite = false;
-      }
-    }
+//           if (favorite) {
+//             result[i].favorite = true;
+//           } else {
+//             result[i].favorite = false;
+//           }
+//         }
+//       } catch (error) {
+//         result[i].userName = 'space user';
+//         result[i].favorite = false;
+//       }
+//     }
 
-    res.json(result);
-  } catch (err) {
-    next(err);
-  }
-});
+//     res.json(result);
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
-// GET /api/travels/:id Return a travel find by id.
+// // GET /api/travels/:id Return a travel find by id.
 
-router.get('/:id', async (req, res, next) => {
-	try {
-		const _id = req.params.id;
-		const result = await Travels.findOne({ _id: _id });
-		res.json(result);
-	} catch (err) {
-		next(err);
-	}
-});
+// router.get('/:id', async (req, res, next) => {
+// 	try {
+// 		const _id = req.params.id;
+// 		const result = await Travels.findOne({ _id: _id });
+// 		res.json(result);
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// });
 
-// POST /api/travels Create a new travel.
+// // POST /api/travels Create a new travel.
 
-router.post('/', uploadPhoto.single('photo'), async (req, res, next) => {
-	try {
-		const data = req.body;
-		if (req.file) {
-			data.photo = req.file.filename;
-		}
-        data.favorite = false;
-		const user = await User.findOne({ _id: data.userId });
-		data.userName = user.user;
-		const travel = new Travels(data);
+// router.post('/', uploadPhoto.single('photo'), async (req, res, next) => {
+// 	try {
+// 		const data = req.body;
+// 		if (req.file) {
+// 			data.photo = req.file.filename;
+// 		}
+//         data.favorite = false;
+// 		const user = await User.findOne({ _id: data.userId });
+// 		data.userName = user.user;
+// 		const travel = new Travels(data);
 
-		const result = await travel.save();
-		res.json(result);
-	} catch (err) {
-		next(err);
-	}
-});
+// 		const result = await travel.save();
+// 		res.json(result);
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// });
 
-// PUT /api/travels/:id Update a travel by id.
+// // PUT /api/travels/:id Update a travel by id.
 
-router.put('/:id', uploadPhoto.single('photo'), async (req, res, next) => {
-	try {
-		const _id = req.params.id;
-		const data = req.body;
-		if (req.file) {
-			data.photo = req.file.filename;
-			const oldTravel = await Travels.findOne({ _id: _id });
-			if (oldTravel.photo) {
-				FileSystem.unlinkSync(`public/uploads/${oldTravel.photo}`);
-			}
-		}
-		const result = await Travels.findOneAndUpdate({ _id: _id }, data, {
-			new: true,
-		});
-		res.json(result);
-	} catch (err) {
-		next(err);
-	}
-});
+// router.put('/:id', uploadPhoto.single('photo'), async (req, res, next) => {
+// 	try {
+// 		const _id = req.params.id;
+// 		const data = req.body;
+// 		if (req.file) {
+// 			data.photo = req.file.filename;
+// 			const oldTravel = await Travels.findOne({ _id: _id });
+// 			if (oldTravel.photo) {
+// 				FileSystem.unlinkSync(`public/uploads/${oldTravel.photo}`);
+// 			}
+// 		}
+// 		const result = await Travels.findOneAndUpdate({ _id: _id }, data, {
+// 			new: true,
+// 		});
+// 		res.json(result);
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// });
 
-// DELETE /api/travels/:id Delete a travel by id.
+// // DELETE /api/travels/:id Delete a travel by id.
 
-router.delete('/:id', async (req, res, next) => {
-	try {
-		const _id = req.params.id;
+// router.delete('/:id', async (req, res, next) => {
+// 	try {
+// 		const _id = req.params.id;
 
-		const travel = await Travels.findOne({ _id: _id });
+// 		const travel = await Travels.findOne({ _id: _id });
 
-		if (travel.photo) {
-			FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
-		}
+// 		if (travel.photo) {
+// 			FileSystem.unlinkSync(`public/uploads/${travel.photo}`);
+// 		}
 
-		await Travels.deleteOne({ _id: _id });
-		res.json('Anuncio borrado correctamente');
-	} catch (err) {
-		next(err);
-	}
-});
+// 		await Travels.deleteOne({ _id: _id });
+// 		res.json('Anuncio borrado correctamente');
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// });
 
-// DELETE /api/travels/deletePhoto/:photoName Delete a photo by name.
+// // DELETE /api/travels/deletePhoto/:photoName Delete a photo by name.
 
-router.delete('/deletePhoto/:photoName', async (req, res, next) => {
-	try {
-		const photoName = req.params.photoName;
-		FileSystem.unlinkSync(`public/uploads/${photoName}`);
-		const travel = await Travels.findOneAndUpdate(
-			{ photo: photoName },
-			{ photo: null }
-		);
-		res.json('Foto borrada correctamente');
-	} catch (err) {
-		next(err);
-	}
-});
+// router.delete('/deletePhoto/:photoName', async (req, res, next) => {
+// 	try {
+// 		const photoName = req.params.photoName;
+// 		FileSystem.unlinkSync(`public/uploads/${photoName}`);
+// 		const travel = await Travels.findOneAndUpdate(
+// 			{ photo: photoName },
+// 			{ photo: null }
+// 		);
+// 		res.json('Foto borrada correctamente');
+// 	} catch (err) {
+// 		next(err);
+// 	}
+// });
 
-// PUT /api/travels/buy/:id buy a travel by id.
+// // PUT /api/travels/buy/:id buy a travel by id.
 
-router.put('/buy/:id', async (req, res, next) => {
-	try {
-		const _id = req.params.id;
-		const userBuyer = req.body;
-		update = { active: false, userBuyer: userBuyer.userBuyer };
-		const result = await Travels.findOneAndUpdate({ _id: _id }, update, {
-      new: true,
-		});
-		res.json(result);
-		console.log('result', result);
-	} catch (err) {
-    next(err);
-	}
-});
+// router.put('/buy/:id', async (req, res, next) => {
+// 	try {
+// 		const _id = req.params.id;
+// 		const userBuyer = req.body;
+// 		update = { active: false, userBuyer: userBuyer.userBuyer };
+// 		const result = await Travels.findOneAndUpdate({ _id: _id }, update, {
+//       new: true,
+// 		});
+// 		res.json(result);
+// 		console.log('result', result);
+// 	} catch (err) {
+//     next(err);
+// 	}
+// });
 
-// PUT /api/travels/active/:id active a travel by id.
+// // PUT /api/travels/active/:id active a travel by id.
 
-router.put('/active/:id', async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    const travelActive = req.body.travelActive;
-    const result = await Travels.findOneAndUpdate({ _id: id }, {active: travelActive}, {
-      new: true,
-    });
-    res.json(result);
-  } catch (err) {
-    next(err);
-  }
-});
+// router.put('/active/:id', async (req, res, next) => {
+//   try {
+//     const id = req.params.id;
+//     const travelActive = req.body.travelActive;
+//     const result = await Travels.findOneAndUpdate({ _id: id }, {active: travelActive}, {
+//       new: true,
+//     });
+//     res.json(result);
+//   } catch (err) {
+//     next(err);
+//   }
+// });
 
-// POST /api/users/:user Return a travels find by user.
+// // POST /api/users/:user Return a travels find by user.
 
-router.post(
-	'/users',
-	upload.array('files'),
+// router.post(
+// 	'/users',
+// 	upload.array('files'),
 
-	async function (req, res, next) {
-		try {
-			const user = req.body.user;
+// 	async function (req, res, next) {
+// 		try {
+// 			const user = req.body.user;
 
-			const userData = await User.findOne({ user: user });
-			const userId = userData._id;
-			const travels = await Travels.find({ userId: userId });
+// 			const userData = await User.findOne({ user: user });
+// 			const userId = userData._id;
+// 			const travels = await Travels.find({ userId: userId });
 
-			res.json({ status: 'OK', result: travels });
-			return;
-		} catch (error) {
-			res.json({ status: 400, message: 'The user has no ads' });
-			return;
-		}
-	}
-);
+// 			res.json({ status: 'OK', result: travels });
+// 			return;
+// 		} catch (error) {
+// 			res.json({ status: 400, message: 'The user has no ads' });
+// 			return;
+// 		}
+// 	}
+// );
 
 
-module.exports = router;
+// module.exports = router;

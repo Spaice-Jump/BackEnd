@@ -45,26 +45,30 @@ const passwordLinkController = new PasswordLinkController()
  * Rutas del API
  */
 
-app.use('/api/v1',require('./routes/api/user'));
+app.use('/api/user',require('./routes/api/user/public'));
+app.use('/api/user/p',jwtAuthMiddleware,require('./routes/api/user/private'));
+
 app.post("/api/authenticate", loginController.postAPI);
-app.use('/api/travels', require('./routes/api/travels'));
+
+// app.use('/api/travels', require('./routes/api/travels'));
+app.use('/api/travels', require('./routes/api/travels/public'));
+app.use('/api/travels/p',jwtAuthMiddleware, require('./routes/api/travels/private'));
+
 app.use('/api/locations', require('./routes/api/locations'));
-app.use('/api/deleteUser',jwtAuthMiddleware,require('./routes/api/deleteUser'));
+
+//app.use('/api/deleteUser',jwtAuthMiddleware,require('./routes/api/deleteUser'));
 app.use('/api/jwtWeb',require('./routes/api/jwtWeb'));
 app.use('/api/favorites',jwtAuthMiddleware, require('./routes/api/favorites'));
-app.use('/api/buy', require('./routes/api/buy'));
-
-
-
-//rutas sitio web
+app.use('/api/buy', jwtAuthMiddleware,require('./routes/api/buy'));
 
 app.get('/login', loginController.index);
 app.post('/login', loginController.postAPI);
 app.get('/password', passwordController.index)
 app.post('/password', passwordController.putAPI)
-app.post('/update', updateUserController.updateUser)
+app.post('/update', jwtAuthMiddleware,updateUserController.updateUser)
 app.use('/recorderPassword', passwordLinkController.getAPI )
 
+//rutas sitio web
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
