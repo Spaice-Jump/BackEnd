@@ -2,6 +2,7 @@ const Usuario = require('../models/users.js');
 const User = require('../models/users');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const SendEmail = require('../models/sendEmail')
 class PasswordController {
   index(req, res, next) {
     res.locals.error = '';
@@ -48,37 +49,43 @@ class PasswordController {
         const server_URL = process.env.SERVER_URL;
         const fullURL = `${server_URL}/recorderPassword/${token}`;
         console.log('completa', fullURL)
+        const subject ='Recuperacion Password' 
+        const text = process.env.TEXT_PASSWORD
+
+        //envio email
+
+        SendEmail(email, subject, text, fullURL)
 
 
-      // Configura el transporte de correo
-      const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-          user: process.env.EMAIL_PASSWORD,    
-          pass: process.env.PASSWOR_REMEMBER  
-        },
-      });
+      // // Configura el transporte de correo
+      // const transporter = nodemailer.createTransport({
+      //   service: 'Gmail',
+      //   auth: {
+      //     user: process.env.EMAIL_PASSWORD,    
+      //     pass: process.env.PASSWOR_REMEMBER  
+      //   },
+      // });
 
-      // Detalles del correo electrónico
-      const mailOptions = {
-        from: process.env.EMAIL_PASSWORD,
-        to: email,
-        subject: 'Recuperacion Password',
-        text: `Le escribimos de la App Space Jump para reestablecer la contraseña pinche el siguiente link:  ${fullURL}`
-        //passw,
-      };
+      // // Detalles del correo electrónico
+      // const mailOptions = {
+      //   from: process.env.EMAIL_PASSWORD,
+      //   to: email,
+      //   subject: 'Recuperacion Password',
+      //   text: `Le escribimos de la App Space Jump para reestablecer la contraseña pinche el siguiente link:  ${fullURL}`
+      //   //passw,
+      // };
 
-      // Envía el correo electrónico
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log('Error al enviar el correo:', error);
-          res.json({ error:error, msg:'Correo electrónico no enviado' })
-        } else {
-          console.log('Correo electrónico enviado:', info.response);
-          res.json({ status:200, msg:'Correo electrónico enviado correctamente' });
+      // // Envía el correo electrónico
+      // transporter.sendMail(mailOptions, (error, info) => {
+      //   if (error) {
+      //     console.log('Error al enviar el correo:', error);
+      //     res.json({ error:error, msg:'Correo electrónico no enviado' })
+      //   } else {
+      //     console.log('Correo electrónico enviado:', info.response);
+      //     res.json({ status:200, msg:'Correo electrónico enviado correctamente' });
 
-        }
-      });
+      //   }
+      // });
       res.json({ jwt: token, _id: usuario._id, email: usuario.email, userName: usuario.user, msg:'Correo electrónico enviado correctamente' });
 
     } catch (err) {

@@ -65,8 +65,9 @@ app.get('/login', loginController.index);
 app.post('/login', loginController.postAPI);
 app.get('/password', passwordController.index)
 app.post('/password', passwordController.putAPI)
-app.post('/update', jwtAuthMiddleware,updateUserController.updateUser)
+app.post('/update',jwtAuthMiddleware,updateUserController.updateUser)
 app.use('/recorderPassword', passwordLinkController.getAPI )
+app.post('/updatePassword',updateUserController.updateUser)
 
 //rutas sitio web
 app.use('/', indexRouter);

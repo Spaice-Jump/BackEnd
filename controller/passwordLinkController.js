@@ -15,7 +15,7 @@ class PasswordLinkController {
     try{
       // Captura el token de la URL
       const token = req.body.token;
-    
+      console.log('eedsdd',req.body)
       // Realiza la lógica que necesites con el token
       console.log('Token recibido:', token);
     
