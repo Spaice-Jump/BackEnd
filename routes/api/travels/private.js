@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const revieJwtoken = require('../../../lib/revieJwtoken');
-
+const SendMail = require('../../../models/sendEmail');
 const upload = multer({ dest: 'uploads/' });
 
 // POST /api/travels Create a new travel.
@@ -90,7 +90,6 @@ router.delete('/deletePhoto/:photoName', async (req, res, next) => {
 });
 
 // PUT /api/travels/buy/:id buy a travel by id.
-//Buy
 
 router.put('/buy/:id', async (req, res, next) => {
 	try {
@@ -100,7 +99,7 @@ router.put('/buy/:id', async (req, res, next) => {
 
 		const update = {
 			$inc: { soldSeats: 1 },
-			$push: { userBuyer: userBuyer.userBuyer }
+			$push: { userBuyer: userBuyer.userBuyer },
 		};
 
 		const result = await Travels.findOneAndUpdate({ _id: _id }, update, {
@@ -114,46 +113,80 @@ router.put('/buy/:id', async (req, res, next) => {
 
 		const email = usuario.email;
 		const travel = await Travels.findById({ _id: _id });
-		// Configura nodemailer para enviar correos electrónicos
 
-		// Configura el transporte de correo
-		const transporter = nodemailer.createTransport({
-			service: 'Gmail',
-			auth: {
-				user: process.env.EMAIL_PASSWORD,
-				pass: process.env.PASSWOR_REMEMBER,
-			},
-		});
+		console.log('travelssss', travel);
+		const subject = 'Comprado Viaje Satisfactoriamente';
+		textoComprador = `Le escribimos de la App Space Jump para comunicarle que su viaje se a comprado satisfactoriamente tenga un viaje al espacio feliz
+			Le adjuntamos detalles de la compra:
+			Titulo: ${travel.topic}
+			Origen: ${travel.origin}
+			Destino: ${travel.destination}
+			Precio:${travel.price}
+			Fecha Salida: ${travel.datetimeDeparture}
+			`;
+		const fecha = new Date();
+		const vendedor = await User.findById({ _id: travel.userId });
+		const subjectVendedor = 'Viaje suyo Comprado';
+		const textVendedor = `Le escribimos de la App Space Jump para comunicarle que su viaje que detallamos a continuación ha sido comprado por el usuario ${usuario.user} en la fecha ${fecha}
+			Detalles del viaje:
+			Titulo: ${travel.topic}
+			Origen: ${travel.origin}
+			Destino: ${travel.destination}
+			Precio:${travel.price}
+			Fecha Salida: ${travel.datetimeDeparture}
 
-		// Detalles del correo electrónico
-		const mailOptions = {
-			from: process.env.EMAIL_PASSWORD,
-			to: email,
-			subject: 'Comprado Viaje Satisfactoriamente',
-			text: `Le escribimos de la App Space Jump para comunicarle que su viaje se a comprado satisfactoriamente tenga un viaje al espacio feliz
-		Le adjuntamos detalles de la compra:
-		Titulo: ${travel.topic}
-		Origen: ${travel.origin}
-		Destino: ${travel.destination}
-		Precio:${travel.price}
-		Fecha Salida: ${travel.datetimeDeparture}
-		`,
-			//passw,
-		};
 
-		// Envía el correo electrónico
-		transporter.sendMail(mailOptions, (error, info) => {
-			if (error) {
-				console.log('Error al enviar el correo:', error);
-				res.json({ error: error, msg: 'Correo electrónico no enviado' });
-			} else {
-				console.log('Correo electrónico enviado:', info.response);
-				res.json({
-					status: 200,
-					msg: 'Correo electrónico enviado correctamente',
-				});
-			}
-		});
+			Gracias por confiar en nuestra plataforma para publicar su viaje
+			`;
+		console.log('vend', vendedor);
+		//enviar email comprador
+
+		SendMail(email, subject, textoComprador);
+
+		//enviar email Vendedor
+
+		SendMail(vendedor.email, subjectVendedor, textVendedor);
+
+		// // Configura el transporte de correo
+		// const transporter = nodemailer.createTransport({
+		// 	service: 'Gmail',
+		// 	auth: {
+		// 		user: process.env.EMAIL_PASSWORD,
+		// 		pass: process.env.PASSWOR_REMEMBER,
+		// 	},
+		// });
+
+		// // Detalles del correo electrónico
+		// const mailOptions = {
+		// 	from: process.env.EMAIL_PASSWORD,
+		// 	to: email,
+		// 	subject: 'Comprado Viaje Satisfactoriamente',
+		// 	text: `Le escribimos de la App Space Jump para comunicarle que su viaje se a comprado satisfactoriamente tenga un viaje al espacio feliz
+		// Le adjuntamos detalles de la compra:
+		// Titulo: ${travel.topic}
+		// Origen: ${travel.origin}
+		// Destino: ${travel.destination}
+		// Precio:${travel.price}
+		// Fecha Salida: ${travel.datetimeDeparture}
+		// `,
+		// 	//passw,
+		// };
+
+		// // Envía el correo electrónico
+		// transporter.sendMail(mailOptions, (error, info) => {
+		// 	if (error) {
+		// 		console.log('Error al enviar el correo:', error);
+		// 		res.json({ error: error, msg: 'Correo electrónico no enviado' });
+		// 	} else {
+		// 		console.log('Correo electrónico enviado:', info.response);
+		// 		res.json({
+		// 			status: 200,
+		// 			msg: 'Correo electrónico enviado correctamente',
+		// 		});
+		// 	}
+		// });
+		res.json(result);
+		console.log('result', result);
 	} catch (err) {
 		next(err);
 	}
