@@ -12,7 +12,7 @@ const travelsSchema = moongose.Schema({
   userId: String,
   userName: String,
   active: Boolean,
-  userBuyer: String,
+  userBuyer: [String],
   datetimeCreation: Date,
   favorite: Boolean,
   datetimeDeparture: Date,

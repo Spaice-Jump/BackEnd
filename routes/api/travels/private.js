@@ -12,9 +12,6 @@ const revieJwtoken = require('../../../lib/revieJwtoken');
 
 const upload = multer({ dest: 'uploads/' });
 
-
-
-
 // POST /api/travels Create a new travel.
 
 router.post('/', uploadPhoto.single('photo'), async (req, res, next) => {
@@ -23,7 +20,7 @@ router.post('/', uploadPhoto.single('photo'), async (req, res, next) => {
 		if (req.file) {
 			data.photo = req.file.filename;
 		}
-        data.favorite = false;
+		data.favorite = false;
 		const user = await User.findOne({ _id: data.userId });
 		data.userName = user.user;
 		const travel = new Travels(data);
@@ -98,75 +95,86 @@ router.put('/buy/:id', async (req, res, next) => {
 	try {
 		const _id = req.params.id;
 		const userBuyer = req.body;
-		console.log('userbyrer', userBuyer)
-		const usuario = await User.findById({_id:userBuyer.userBuyer})
-		console.log('usuariooo',usuario)
-		update = { active: false, userBuyer: userBuyer.userBuyer };
-		const result = await Travels.findOneAndUpdate({ _id: _id }, update, {
-      new: true,
-		});
-		const email = usuario.email
-		const travel = await Travels.findById({_id:_id})
-		console.log('travelssss', travel)
-		// Configura nodemailer para enviar correos electrónicos
-      
-      // Configura el transporte de correo
-      const transporter = nodemailer.createTransport({
-        service: 'Gmail',
-        auth: {
-          user: process.env.EMAIL_PASSWORD,    
-          pass: process.env.PASSWOR_REMEMBER  
-        },
-      });
+		const usuario = await User.findById({ _id: userBuyer.userBuyer });
 
-      // Detalles del correo electrónico
-      const mailOptions = {
-        from: process.env.EMAIL_PASSWORD,
-        to: email,
-        subject: 'Comprado Viaje Satisfactoriamente',
-        text: `Le escribimos de la App Space Jump para comunicarle que su viaje se a comprado satisfactoriamente tenga un viaje al espacio feliz
+		const update = {
+			$inc: { soldSeats: 1 },
+			$push: { userBuyer: userBuyer.userBuyer }
+		};
+
+		const result = await Travels.findOneAndUpdate({ _id: _id }, update, {
+			new: true,
+		});
+
+		if (result.soldSeats === result.availableSeats) {
+			result.active = false;
+			await result.save();
+		}
+
+		const email = usuario.email;
+		const travel = await Travels.findById({ _id: _id });
+		// Configura nodemailer para enviar correos electrónicos
+
+		// Configura el transporte de correo
+		const transporter = nodemailer.createTransport({
+			service: 'Gmail',
+			auth: {
+				user: process.env.EMAIL_PASSWORD,
+				pass: process.env.PASSWOR_REMEMBER,
+			},
+		});
+
+		// Detalles del correo electrónico
+		const mailOptions = {
+			from: process.env.EMAIL_PASSWORD,
+			to: email,
+			subject: 'Comprado Viaje Satisfactoriamente',
+			text: `Le escribimos de la App Space Jump para comunicarle que su viaje se a comprado satisfactoriamente tenga un viaje al espacio feliz
 		Le adjuntamos detalles de la compra:
 		Titulo: ${travel.topic}
 		Origen: ${travel.origin}
 		Destino: ${travel.destination}
 		Precio:${travel.price}
 		Fecha Salida: ${travel.datetimeDeparture}
-		`
-        //passw,
-      };
+		`,
+			//passw,
+		};
 
-      // Envía el correo electrónico
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log('Error al enviar el correo:', error);
-          res.json({ error:error, msg:'Correo electrónico no enviado' })
-        } else {
-          console.log('Correo electrónico enviado:', info.response);
-          res.json({ status:200, msg:'Correo electrónico enviado correctamente' });
-
-        }
-	})
-
-		res.json(result);
-		console.log('result', result);
+		// Envía el correo electrónico
+		transporter.sendMail(mailOptions, (error, info) => {
+			if (error) {
+				console.log('Error al enviar el correo:', error);
+				res.json({ error: error, msg: 'Correo electrónico no enviado' });
+			} else {
+				console.log('Correo electrónico enviado:', info.response);
+				res.json({
+					status: 200,
+					msg: 'Correo electrónico enviado correctamente',
+				});
+			}
+		});
 	} catch (err) {
-    next(err);
+		next(err);
 	}
 });
 
 // PUT /api/travels/active/:id active a travel by id.
 
 router.put('/active/:id', async (req, res, next) => {
-  try {
-    const id = req.params.id;
-    const travelActive = req.body.travelActive;
-    const result = await Travels.findOneAndUpdate({ _id: id }, {active: travelActive}, {
-      new: true,
-    });
-    res.json(result);
-  } catch (err) {
-    next(err);
-  }
+	try {
+		const id = req.params.id;
+		const travelActive = req.body.travelActive;
+		const result = await Travels.findOneAndUpdate(
+			{ _id: id },
+			{ active: travelActive },
+			{
+				new: true,
+			}
+		);
+		res.json(result);
+	} catch (err) {
+		next(err);
+	}
 });
 
 // POST /api/users/:user Return a travels find by user.
@@ -178,14 +186,13 @@ router.post(
 	async function (req, res, next) {
 		try {
 			const user = req.body.user;
-         
 
 			const userData = await User.findOne({ user: user });
-     
+
 			const userId = userData._id;
-      
+
 			const travels = await Travels.find({ userId: userId });
- 
+
 			res.json({ status: 'OK', result: travels });
 			return;
 		} catch (error) {
@@ -194,6 +201,5 @@ router.post(
 		}
 	}
 );
-
 
 module.exports = router;
