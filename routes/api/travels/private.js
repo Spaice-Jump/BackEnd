@@ -94,6 +94,7 @@ router.delete('/deletePhoto/:photoName', async (req, res, next) => {
 });
 
 // PUT /api/travels/buy/:id buy a travel by id.
+//Buy
 
 router.put('/buy/:id', async (req, res, next) => {
 	try {
