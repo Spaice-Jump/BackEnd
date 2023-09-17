@@ -69,6 +69,8 @@ app.post('/update',jwtAuthMiddleware,updateUserController.updateUser)
 app.use('/recorderPassword', passwordLinkController.getAPI )
 app.post('/updatePassword',updateUserController.updateUser)
 
+app.use('/api/chat', jwtAuthMiddleware,require('./routes/api/chat'));
+
 //rutas sitio web
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

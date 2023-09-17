@@ -16,6 +16,7 @@ const upload = multer({ dest: 'uploads/' });
 
 
 
+
 // POST /api/travels Create a new travel.
 
 router.post('/', uploadPhoto.single('photo'), async (req, res, next) => {
@@ -226,6 +227,7 @@ router.post(
 		}
 	}
 );
+
 
 
 module.exports = router;
