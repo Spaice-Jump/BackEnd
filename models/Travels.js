@@ -25,6 +25,7 @@ const travelsSchema = moongose.Schema({
 travelsSchema.index({ photo: 1 });
 travelsSchema.index({ userId: 1 });
 travelsSchema.index({ userBuyer: 1 });
+travelsSchema.index({ datetimeDeparture: 1 });
 
 travelsSchema.statics.list = function(filter, limit, skip, sort, select) {
   const query = Travels.find(filter);

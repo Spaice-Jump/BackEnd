@@ -16,7 +16,8 @@ const upload = multer({ dest: 'uploads/' });
 
 router.get('/', async (req, res, next) => {
   try {
-    const filter = {};
+    const currentDate = new Date();
+    const filter = { datetimeDeparture: { $gte: currentDate } };
     const limit = parseInt(req.query.limit);
     const skip = parseInt(req.query.skip);
     const sort = { datetimeCreation: 'desc' };
