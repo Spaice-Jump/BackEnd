@@ -5,6 +5,11 @@ const favoritesSchema = moongose.Schema({
   travelId: String, 
 });
 
+// Creación de un índice sobre aquellos campos por los que se van a realizar búsquedas.
+
+favoritesSchema.index({ userId: 1 });
+favoritesSchema.index({ travelId: 1 });
+
 favoritesSchema.statics.list = function(filter, limit, skip, sort, select) {
   const query = Favorites.find(filter);
   query.limit(limit);

@@ -24,6 +24,10 @@ class LoginController {
         return;
       }
 
+      // guardamos en la sesión el _id del usuario.
+
+      req.session.authUser = usuario._id;
+
       // si existe y la contrseña coincide
       // crear un token JWT con el _id del usuario dentro
       const token = await jwt.sign(
@@ -42,5 +46,7 @@ class LoginController {
     }
   }
 }
+
+
 
 module.exports = LoginController;

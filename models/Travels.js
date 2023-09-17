@@ -1,24 +1,30 @@
 const moongose = require('mongoose');
 
 const travelsSchema = moongose.Schema({
-  topic: String,
+  topic: { type: String, required: true },
   origin: {type: String, required: true},
   destination: {type: String, required: true},
   remarks: String,
   price: {type: Number, required: true},
-  forSale: Boolean,
-  active: Boolean,
+  forSale: { type: Boolean, required: true },
+  active: { type: Boolean, required: true },
   photo: String,
-  userId: String,
-  userName: String,
-  active: Boolean,
+  userId: { type: String, required: true },
+  userName: { type: String, required: true },String,
+  active: { type: Boolean, required: true },
   userBuyer: [String],
-  datetimeCreation: Date,
+  datetimeCreation: {type: Date, required: true},
   favorite: Boolean,
-  datetimeDeparture: Date,
+  datetimeDeparture: {type: Date, required: true},
   availableSeats: Number,
   soldSeats: Number,
 });
+
+// Creación de un índice sobre aquellos campos por los que se van a realizar búsquedas.
+
+travelsSchema.index({ photo: 1 });
+travelsSchema.index({ userId: 1 });
+travelsSchema.index({ userBuyer: 1 });
 
 travelsSchema.statics.list = function(filter, limit, skip, sort, select) {
   const query = Travels.find(filter);
