@@ -9,13 +9,6 @@ const userSchema = mongoose.Schema({
     password: String,
   });
 
-  
-// Creación de un índice sobre aquellos campos por los que se van a realizar búsquedas.
-
-userSchema.index({ user: 1 });
-userSchema.index({ email: 1 });
-
-
 //método estático
 userSchema.statics.hashPassword = function (password) {
     return bcrypt.hash(password, 7);
