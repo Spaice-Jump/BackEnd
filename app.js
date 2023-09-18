@@ -18,6 +18,8 @@ const LoginController = require('./controller/loginController');
 const PasswordController = require('./controller/passwordController');
 const UpdateUserController = require('./controller/updateUserController');
 const PasswordLinkController = require('./controller/passwordLinkController');
+const SendEmailContact= require('./controller/sendEmailContact')
+
 
 require('./lib/connectMongoose');
 
@@ -40,6 +42,7 @@ const loginController = new LoginController();
 const passwordController = new PasswordController();
 const updateUserController = new UpdateUserController();
 const passwordLinkController = new PasswordLinkController();
+const sendEmailContact = new SendEmailContact()
 
 /**
  * Rutas del API
@@ -74,6 +77,8 @@ app.use('/recorderPassword', passwordLinkController.getAPI);
 app.post('/updatePassword', updateUserController.updateUser);
 
 app.use('/api/chat', jwtAuthMiddleware,require('./routes/api/chat'));
+app.use('/sendEmail', jwtAuthMiddleware, sendEmailContact.sendEmail)
+
 
 //rutas sitio web
 app.use('/', indexRouter);
