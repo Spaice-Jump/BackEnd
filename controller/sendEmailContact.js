@@ -8,7 +8,7 @@ class SendEmailContact {
     async sendEmail(req, res, next) {
         try {
           const data = req.body;
-          console.log('email', data.user)
+          console.log('email', data)
     
           // buscar el usuario en la BD
           const usuario = await Usuario.findOne({ user: data.user });
@@ -36,13 +36,17 @@ class SendEmailContact {
         
           
             // Construye la URL completa con el token
-           
+           const email = usuario.email
             const subject =`Contacto Viaje solicitado`
-            const text = process.env.TEXT_PASSWORD
+            const text = `Le escribimos desde la Aplicacion Space Jump para comunicarle que el usuario ${data.name} le ha dejado el siguiente mensaje
+                            correspondiente al anuncio publicado
+                            Nombre: ${data.name} ${data.surnames}
+                            Empresa: ${data.companyName}
+                            Consulta: ${data.textEmail}`
     
             //envio email
     
-            SendEmail(email, subject, text, fullURL)
+            SendEmail(email, subject, text)
     
           res.json({status: 'ok', msg:'Correo electrónico enviado correctamente' });
     
