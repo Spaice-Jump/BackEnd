@@ -1,5 +1,5 @@
-const Usuario = require('../models/Users.js');
-const User = require('../models/Users.js');
+const Usuario = require('../models/users.js');
+const User = require('../models/users.js');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 
