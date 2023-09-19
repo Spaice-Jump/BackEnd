@@ -1,17 +1,13 @@
 const express = require('express');
+const multer = require('multer');
 const router = express.Router();
+
+const uploadPhoto = require('../../../lib/multerConfig');
+const SendMail = require('../../../models/sendEmail');
 const Travels = require('../../../models/Travels');
 const User = require('../../../models/users');
-const uploadPhoto = require('../../../lib/multerConfig');
 const FileSystem = require('fs');
-const Favorites = require('../../../models/favorites');
-const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
-const multer = require('multer');
-const revieJwtoken = require('../../../lib/revieJwtoken');
-const SendMail = require('../../../models/sendEmail');
 const upload = multer({ dest: 'uploads/' });
-
 
 // POST /api/travels Create a new travel.
 
@@ -139,7 +135,6 @@ router.put('/buy/:id', async (req, res, next) => {
 
 			Gracias por confiar en nuestra plataforma para publicar su viaje
 			`;
-		console.log('vend', vendedor);
 		//enviar email comprador
 
 		SendMail(email, subject, textoComprador);
@@ -148,44 +143,6 @@ router.put('/buy/:id', async (req, res, next) => {
 
 		SendMail(vendedor.email, subjectVendedor, textVendedor);
 
-		// // Configura el transporte de correo
-		// const transporter = nodemailer.createTransport({
-		// 	service: 'Gmail',
-		// 	auth: {
-		// 		user: process.env.EMAIL_PASSWORD,
-		// 		pass: process.env.PASSWOR_REMEMBER,
-		// 	},
-		// });
-
-		// // Detalles del correo electrónico
-		// const mailOptions = {
-		// 	from: process.env.EMAIL_PASSWORD,
-		// 	to: email,
-		// 	subject: 'Comprado Viaje Satisfactoriamente',
-		// 	text: `Le escribimos de la App Space Jump para comunicarle que su viaje se a comprado satisfactoriamente tenga un viaje al espacio feliz
-		// Le adjuntamos detalles de la compra:
-		// Titulo: ${travel.topic}
-		// Origen: ${travel.origin}
-		// Destino: ${travel.destination}
-		// Precio:${travel.price}
-		// Fecha Salida: ${travel.datetimeDeparture}
-		// `,
-		// 	//passw,
-		// };
-
-		// // Envía el correo electrónico
-		// transporter.sendMail(mailOptions, (error, info) => {
-		// 	if (error) {
-		// 		console.log('Error al enviar el correo:', error);
-		// 		res.json({ error: error, msg: 'Correo electrónico no enviado' });
-		// 	} else {
-		// 		console.log('Correo electrónico enviado:', info.response);
-		// 		res.json({
-		// 			status: 200,
-		// 			msg: 'Correo electrónico enviado correctamente',
-		// 		});
-		// 	}
-		// });
 		res.json(result);
 		console.log('result', result);
 	} catch (err) {
@@ -221,11 +178,8 @@ router.post(
 	async function (req, res, next) {
 		try {
 			const user = req.body.user;
-
 			const userData = await User.findOne({ user: user });
-
 			const userId = userData._id;
-
 			const travels = await Travels.find({ userId: userId });
 
 			res.json({ status: 'OK', result: travels });
@@ -236,6 +190,5 @@ router.post(
 		}
 	}
 );
-
 
 module.exports = router;
