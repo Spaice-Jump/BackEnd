@@ -29,7 +29,6 @@ class PasswordLinkController {
 			// Si todas las verificaciones pasan, el token es válido
 			res.json({ valid: true, email: user.email, user: user.user });
 		} catch (error) {
-			console.log(error);
 			res.json({ valid: false, error: 'Token no válido', status: 400 });
 		}
 	}

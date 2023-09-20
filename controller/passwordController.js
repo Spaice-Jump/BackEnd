@@ -11,7 +11,6 @@ class PasswordController {
 	async putAPI(req, res, next) {
 		try {
 			const { email } = req.body;
-			console.log('email', email);
 
 			// buscar el usuario en la BD
 			const usuario = await Usuario.findOne({ email: email });

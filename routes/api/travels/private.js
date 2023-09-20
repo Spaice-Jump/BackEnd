@@ -111,7 +111,6 @@ router.put('/buy/:id', async (req, res, next) => {
 		const email = usuario.email;
 		const travel = await Travels.findById({ _id: _id });
 
-		console.log('travelssss', travel);
 		const subject = 'Comprado Viaje Satisfactoriamente';
 		textoComprador = `Le escribimos de la App Space Jump para comunicarle que su viaje se a comprado satisfactoriamente tenga un viaje al espacio feliz
 			Le adjuntamos detalles de la compra:
@@ -144,7 +143,6 @@ router.put('/buy/:id', async (req, res, next) => {
 		SendMail(vendedor.email, subjectVendedor, textVendedor);
 
 		res.json(result);
-		console.log('result', result);
 	} catch (err) {
 		next(err);
 	}

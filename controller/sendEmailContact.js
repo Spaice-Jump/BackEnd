@@ -41,7 +41,6 @@ class SendEmailContact {
 				msg: 'Correo electrónico enviado correctamente',
 			});
 		} catch (err) {
-			console.log(err);
 			next(err);
 		}
 	}

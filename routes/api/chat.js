@@ -99,8 +99,6 @@ router.post(
 				readByUser: false,
 			});
 
-			console.log(newChat);
-
 			const chatSave = await newChat.save();
 
 			res.json({ status: 'OK', result: chatSave });

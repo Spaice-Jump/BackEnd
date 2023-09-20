@@ -22,7 +22,6 @@ class UpdateUserController {
 
 					// si no lo encuentro o no coincide la contraseña --> error
 					if (!usuario) {
-						console.log('usuariofalse', !password);
 						res.json({
 							status: 400,
 							error: 'No existe ese email en la base de datos',
