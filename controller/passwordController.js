@@ -40,7 +40,6 @@ class PasswordController {
 			// Construye la URL completa con el token
 			const server_URL = process.env.SERVER_URL;
 			const fullURL = `${server_URL}/recorderPassword/${token}`;
-			console.log('completa', fullURL);
 			const subject = 'Recuperacion Password';
 			const text = process.env.TEXT_PASSWORD;
 
@@ -55,7 +54,6 @@ class PasswordController {
 				msg: 'Correo electrónico enviado correctamente',
 			});
 		} catch (err) {
-			console.log(err);
 			next(err);
 		}
 	}

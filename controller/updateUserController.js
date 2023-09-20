@@ -52,7 +52,6 @@ class UpdateUserController {
 				userName: usuario.user,
 			});
 		} catch (err) {
-			console.log(err);
 			next(err);
 		}
 	}

@@ -7,7 +7,6 @@ class SendEmailContact {
 			const data = req.body;
 			// buscar el usuario en la BD
 			const usuario = await Usuario.findOne({ user: data.user });
-			console.log('use', usuario);
 
 			// si no lo encuentro --> error
 			if (!usuario) {
