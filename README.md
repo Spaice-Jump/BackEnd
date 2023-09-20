@@ -1,6 +1,6 @@
 # BackEnd --- 
 ## Project: SPACE JUMP
-* Jesús Martín Moreno
+* Jesús Martín Romero
 * Antonio Luis Martinez Perales
 * Enric Pina Navarro
 * Xavi Roca Vilalta
@@ -31,6 +31,7 @@ SERVER_URL=http://localhost:3000
 JWT_SECRET=********** // secreto para el JWT
 EMAIL_PASSWORD=*********** // eMail que envía los correos
 PASSWOR_REMEMBER=********** // password del correo
+TEXT_PASSWORD=Le escribimos de la App Space Jump para reestablecer la contraseña pinche el siguiente link:
 ```
 
 Checking MongoDB

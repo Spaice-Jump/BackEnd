@@ -18,8 +18,7 @@ const LoginController = require('./controller/loginController');
 const PasswordController = require('./controller/passwordController');
 const UpdateUserController = require('./controller/updateUserController');
 const PasswordLinkController = require('./controller/passwordLinkController');
-const SendEmailContact= require('./controller/sendEmailContact')
-
+const SendEmailContact = require('./controller/sendEmailContact');
 
 require('./lib/connectMongoose');
 
@@ -42,7 +41,7 @@ const loginController = new LoginController();
 const passwordController = new PasswordController();
 const updateUserController = new UpdateUserController();
 const passwordLinkController = new PasswordLinkController();
-const sendEmailContact = new SendEmailContact()
+const sendEmailContact = new SendEmailContact();
 
 /**
  * Rutas del API
@@ -50,24 +49,17 @@ const sendEmailContact = new SendEmailContact()
 
 app.use('/api/user', require('./routes/api/user/public'));
 app.use('/api/user/p', jwtAuthMiddleware, require('./routes/api/user/private'));
-
 app.post('/api/authenticate', loginController.postAPI);
-
-// app.use('/api/travels', require('./routes/api/travels'));
 app.use('/api/travels', require('./routes/api/travels/public'));
 app.use(
 	'/api/travels/p',
 	jwtAuthMiddleware,
 	require('./routes/api/travels/private')
 );
-
 app.use('/api/locations', require('./routes/api/locations'));
-
-//app.use('/api/deleteUser',jwtAuthMiddleware,require('./routes/api/deleteUser'));
 app.use('/api/jwtWeb', require('./routes/api/jwtWeb'));
 app.use('/api/favorites', jwtAuthMiddleware, require('./routes/api/favorites'));
 app.use('/api/buy', jwtAuthMiddleware, require('./routes/api/buy'));
-
 app.get('/login', loginController.index);
 app.post('/login', loginController.postAPI);
 app.get('/password', passwordController.index);
@@ -75,10 +67,8 @@ app.post('/password', passwordController.putAPI);
 app.post('/update', jwtAuthMiddleware, updateUserController.updateUser);
 app.use('/recorderPassword', passwordLinkController.getAPI);
 app.post('/updatePassword', updateUserController.updateUser);
-
-app.use('/api/chat', jwtAuthMiddleware,require('./routes/api/chat'));
-app.use('/sendEmail', jwtAuthMiddleware, sendEmailContact.sendEmail)
-
+app.use('/api/chat', jwtAuthMiddleware, require('./routes/api/chat'));
+app.use('/sendEmail', jwtAuthMiddleware, sendEmailContact.sendEmail);
 
 //rutas sitio web
 app.use('/', indexRouter);
